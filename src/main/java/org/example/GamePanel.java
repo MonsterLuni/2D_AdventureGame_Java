@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,7 +9,7 @@ public class GamePanel extends JPanel implements Runnable{
     // SCREEN SETTINGS
     final int originalTitleSize = 16; //16x16 tile
     final int scale = 3; //multiplies the pixel size of originalTitleSize
-    final int tileSize = originalTitleSize * scale; // 48x48 tile
+    public final int tileSize = originalTitleSize * scale; // 48x48 tile
     final int maxScreenCol = 16; // x
     final int maxScreenRow = 12; // y
     final int screenWidth = tileSize * maxScreenCol; // 768 pixels
@@ -19,6 +21,7 @@ public class GamePanel extends JPanel implements Runnable{
      */
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+    Player player = new Player(this,keyH);
     //Set player's default position
     int playerX = 100;
     int playerY = 100;
@@ -49,10 +52,8 @@ public class GamePanel extends JPanel implements Runnable{
             timer += currentTime - lastTime;
             lastTime = currentTime;
             if(delta >= 1){
-                // 1 UPDATE: update information such as character positions
-                update();
-                // 2 DRAW: draw the screen with the updated information
-                repaint(); // calls paintComponent (java function)
+                update(); // 1 UPDATE: update information such as character positions
+                repaint(); // 2 DRAW: draw the screen with the updated information. Calls paintComponent (java function)
                 delta--;
                 drawCount++;
             }
@@ -64,24 +65,12 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
     public void update(){
-        if(keyH.upPressed){
-            playerY -= playerSpeed;
-        }
-        if(keyH.downPressed){
-            playerY += playerSpeed;
-        }
-        if(keyH.leftPressed){
-            playerX -= playerSpeed;
-        }
-        if(keyH.rightPressed){
-            playerX += playerSpeed;
-        }
+        player.update();
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g); // super means parent class aka JPanel
         Graphics2D g2 = (Graphics2D) g; // has more functions
-        g2.setColor(Color.white);
-        g2.fillRect(playerX,playerY,tileSize,tileSize);
+        player.draw(g2);
         g2.dispose(); // saves memory because it's deleted
     }
 }
