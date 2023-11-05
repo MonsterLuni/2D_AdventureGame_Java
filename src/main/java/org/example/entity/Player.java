@@ -27,7 +27,7 @@ public class Player extends Entity{
     }
     public void getPlayerImage(){
         try{
-            System.out.println("Image loading started");
+            System.out.println("Player loading started");
             up1 = ImageIO.read(new FileInputStream("F:/Java/_2D_Game_without_Library/src/main/res/player/boy_up_1.png"));
             up2 = ImageIO.read(new FileInputStream("F:/Java/_2D_Game_without_Library/src/main/res/player/boy_up_2.png"));
             down1 = ImageIO.read(new FileInputStream("F:/Java/_2D_Game_without_Library/src/main/res/player/boy_down_1.png"));
@@ -38,8 +38,9 @@ public class Player extends Entity{
             right2 = ImageIO.read(new FileInputStream("F:/Java/_2D_Game_without_Library/src/main/res/player/boy_right_2.png"));
         }catch(IOException e){
             e.printStackTrace();
-            System.out.println("Image loading ended");
+            System.out.println("Player loading error");
         }
+        System.out.println("Player loading ended");
     }
     public void update(){
         pressing = false;
