@@ -16,17 +16,17 @@ public class TileManager {
         tile = new Tile[10];
         mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow];
         getTileImage();
-        loadMap("F:/Java/_2D_Game_without_Library/src/main/res/maps/map01.txt");
+        loadMap("src/main/res/maps/map01.txt");
     }
     public void getTileImage(){
         try{
             System.out.println("Tile loading started");
             tile[0] = new Tile();
-            tile[0].image = ImageIO.read(new FileInputStream("F:/Java/_2D_Game_without_Library/src/main/res/tiles/grass.png"));
+            tile[0].image = ImageIO.read(new FileInputStream("src/main/res/tiles/grass.png"));
             tile[1] = new Tile();
-            tile[1].image = ImageIO.read(new FileInputStream("F:/Java/_2D_Game_without_Library/src/main/res/tiles/wall.png"));
+            tile[1].image = ImageIO.read(new FileInputStream("src/main/res/tiles/wall.png"));
             tile[2] = new Tile();
-            tile[2].image = ImageIO.read(new FileInputStream("F:/Java/_2D_Game_without_Library/src/main/res/tiles/water.png"));
+            tile[2].image = ImageIO.read(new FileInputStream("src/main/res/tiles/water.png"));
         }catch(IOException e){
             e.printStackTrace();
             System.out.println("Tile loading error");
