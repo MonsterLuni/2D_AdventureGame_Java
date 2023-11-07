@@ -32,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable{
     public TileManager tileM = new TileManager(this);
     Sound sEffects = new Sound();
     Sound music = new Sound();
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     public UI ui = new UI(this);
     public CollisionDetection cChecker = new CollisionDetection(this);
     public AssetSetter aSetter = new AssetSetter(this);
@@ -40,6 +40,11 @@ public class GamePanel extends JPanel implements Runnable{
     // ENTITY AND OBJECT
     public SuperObject[] obj = new SuperObject[10];
     public Player player = new Player(this,keyH);
+
+    // GAME STATE
+    public int gameState;
+    public final int playState = 1;
+    public final int pauseState = 2;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -56,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable{
         System.out.println("Music loading started");
         playMusic(0);
         System.out.println("Music loading ended");
+        gameState = playState;
     }
     public void startGameThread(){
         gameThread = new Thread(this);
@@ -87,7 +93,11 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
     public void update(){
-        player.update();
+        if(gameState == playState){
+            player.update();
+        } else if (gameState == pauseState) {
+            // nothing
+        }
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g); // super means parent class aka JPanel
