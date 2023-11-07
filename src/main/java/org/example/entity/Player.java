@@ -2,7 +2,7 @@ package org.example.entity;
 
 import org.example.GamePanel;
 import org.example.KeyHandler;
-import org.example.Sound;
+import org.example.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -55,6 +55,11 @@ public class Player extends Entity{
         }
         System.out.println("Player loading ended");
     }
+    /*public BufferedImage setup(String imageName){
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage scaledImage = null;
+        return BufferedImage;
+    }*/
     public void update(){
         pressing = false;
         if(keyH.upPressed){

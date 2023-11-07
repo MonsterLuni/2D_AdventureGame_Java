@@ -63,7 +63,7 @@ public class UI {
             g2.drawString("x " + gp.player.hasKey, 70, 60);
 
             // TIME
-            playTime += (double)1/60;
+            playTime += (double)1/gp.FPS;
             g2.drawString("Time: " + dFormat.format(playTime) , gp.screenWidth - 250, 60);
 
             // MESSAGE
