@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.object.OBJ_Boots;
 import org.example.object.OBJ_Chest;
 import org.example.object.OBJ_Door;
 import org.example.object.OBJ_Key;
@@ -17,5 +18,6 @@ public class AssetSetter {
         gp.obj[4] = new OBJ_Door(8 * gp.tileSize, 28 * gp.tileSize);
         gp.obj[5] = new OBJ_Door(12 * gp.tileSize, 22 * gp.tileSize);
         gp.obj[6] = new OBJ_Chest(10 * gp.tileSize, 7 * gp.tileSize);
+        gp.obj[7] = new OBJ_Boots(37 * gp.tileSize, 42 * gp.tileSize);
     }
 }

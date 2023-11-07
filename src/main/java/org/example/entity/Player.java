@@ -2,6 +2,7 @@ package org.example.entity;
 
 import org.example.GamePanel;
 import org.example.KeyHandler;
+import org.example.Sound;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,6 +16,8 @@ public class Player extends Entity{
     private boolean pressing = false;
     public final int screenX;
     public final int screenY;
+    public int animationDuration = 15;
+    public int hasKey = 0;
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
@@ -75,10 +78,11 @@ public class Player extends Entity{
         gp.cChecker.checkTile(this);
         // CHECK OBJECT COLLISION
         int objIndex = gp.cChecker.checkObject(this, true);
+        pickUpObject(objIndex);
         //IF COLLISION IS FALSE, THE PLAYER CAN MOVE
         if(pressing){
             spriteCounter++;
-            if(spriteCounter > 15){
+            if(spriteCounter > animationDuration){
                 if(spriteNumber == 1){
                     spriteNumber = 2;
                 }
@@ -93,6 +97,47 @@ public class Player extends Entity{
                     case "down" -> worldY += speed;
                     case "left" -> worldX -= speed;
                     case "right" -> worldX += speed;
+                }
+            }
+        }
+    }
+    public void pickUpObject(int i){
+        if(i != 999){
+            String objectName = gp.obj[i].name;
+            switch(objectName){
+                case "Key" -> {
+                    gp.playSE(1);
+                    hasKey++;
+                    gp.obj[i] = null;
+                    if(Math.random() > 0.8f){
+                        gp.ui.showMessage("You found a perfectly fine key");
+                    }
+                    else{
+                        gp.ui.showMessage("You found an rusty old key");
+                    }
+                }
+                case "Door" -> {
+                    if(hasKey > 0){
+                        gp.playSE(3);
+                        hasKey--;
+                        gp.obj[i] = null;
+                        gp.ui.showMessage("You managed to open the door");
+                    }
+                    else{
+                        gp.ui.showMessage("This door seems to be locked");
+                    }
+                }
+                case "Boots" -> {
+                    gp.playSE(2);
+                    speed += 2;
+                    animationDuration = 10;
+                    gp.obj[i] = null;
+                    gp.ui.showMessage("You feel a lot faster");
+                }
+                case "Chest" -> {
+                    gp.ui.gameFinished = true;
+                    gp.stopMusic();
+                    gp.playSE(4);
                 }
             }
         }

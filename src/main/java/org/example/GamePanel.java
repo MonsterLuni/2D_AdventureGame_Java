@@ -19,21 +19,24 @@ public class GamePanel extends JPanel implements Runnable{
     //WORLDSETTINGS
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-    public final int worldWidth = tileSize * maxWorldCol;
-    public final int worldHeight = tileSize * maxWorldRow;
     // FPS
     int FPS = 60;
     /*
     11 million fps
     15 million fps
      */
+    //SYSTEM
     public TileManager tileM = new TileManager(this);
+    Sound sEffects = new Sound();
+    Sound music = new Sound();
     KeyHandler keyH = new KeyHandler();
-    Thread gameThread;
+    public UI ui = new UI(this);
     public CollisionDetection cChecker = new CollisionDetection(this);
-    public Player player = new Player(this,keyH);
-    public SuperObject[] obj = new SuperObject[10];
     public AssetSetter aSetter = new AssetSetter(this);
+    Thread gameThread;
+    // ENTITY AND OBJECT
+    public SuperObject[] obj = new SuperObject[10];
+    public Player player = new Player(this,keyH);
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -46,6 +49,9 @@ public class GamePanel extends JPanel implements Runnable{
         System.out.println("Object loading started");
         aSetter.setObject();
         System.out.println("Object loading ended");
+        System.out.println("Music loading started");
+        playMusic(0);
+        System.out.println("Music loading ended");
     }
     public void startGameThread(){
         gameThread = new Thread(this);
@@ -94,6 +100,21 @@ public class GamePanel extends JPanel implements Runnable{
         }
         // PLAYER
         player.draw(g2);
+        // UI
+        ui.draw(g2);
         g2.dispose(); // saves memory because it's deleted
+    }
+    public void playMusic(int i){
+        music.setFile(i);
+        music.play();
+        music.loop();
+    }
+    public void stopMusic(){
+        music.stop();
+    }
+    public void playSE(int i){
+        // sound effect (SE)
+        sEffects.setFile(i);
+        sEffects.play();
     }
 }
