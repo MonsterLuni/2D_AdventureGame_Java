@@ -25,15 +25,16 @@ public class GamePanel extends JPanel implements Runnable{
     long timer = 0;
     int currentfps = FPS;
     /*
-    11 million fps
     15 million fps
+    11 million fps
+    8 million fps
      */
     //SYSTEM
     public TileManager tileM = new TileManager(this);
     Sound sEffects = new Sound();
     Sound music = new Sound();
-    KeyHandler keyH = new KeyHandler(this);
     public UI ui = new UI(this);
+    KeyHandler keyH = new KeyHandler(this, this.ui);
     public CollisionDetection cChecker = new CollisionDetection(this);
     public AssetSetter aSetter = new AssetSetter(this);
     Thread gameThread;

@@ -7,8 +7,10 @@ public class KeyHandler implements KeyListener {
 
     public boolean upPressed, downPressed, leftPressed, rightPressed;
     GamePanel gp;
-    public KeyHandler(GamePanel gp){
+    UI ui;
+    public KeyHandler(GamePanel gp, UI ui){
         this.gp = gp;
+        this.ui = ui;
     }
     // DEBUG
     boolean debug = false;
@@ -45,6 +47,11 @@ public class KeyHandler implements KeyListener {
                 }
                 else{
                     debug = false;
+                }
+            }
+            case KeyEvent.VK_F4 -> {
+                if(debug){
+                    ui.gameFinished = true;
                 }
             }
         }
