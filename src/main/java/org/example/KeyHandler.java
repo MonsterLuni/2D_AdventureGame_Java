@@ -54,6 +54,17 @@ public class KeyHandler implements KeyListener {
                     ui.gameFinished = true;
                 }
             }
+            case KeyEvent.VK_F2 -> {
+                if(debug){
+                    if(gp.musicPlaying){
+                        gp.stopMusic();
+                    }
+                    else {
+                        gp.playMusic(0);
+                    }
+
+                }
+            }
         }
     }
 

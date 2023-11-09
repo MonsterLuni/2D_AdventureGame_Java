@@ -24,6 +24,7 @@ public class GamePanel extends JPanel implements Runnable{
     int drawCount = 0;
     long timer = 0;
     int currentfps = FPS;
+    boolean musicPlaying = true;
     /*
     15 million fps
     11 million fps
@@ -126,6 +127,7 @@ public class GamePanel extends JPanel implements Runnable{
             double passed = drawEnd - drawStart;
             g2.drawString("Draw Time: " + ui.dFormat.format(passed / 1000000) + "ms", 10, 100);
             g2.drawString("FPS: " + currentfps, 10, 150);
+            g2.drawString("MusicPlaying: " + musicPlaying, 10, 200);
         }
         g2.dispose(); // saves memory because it's deleted
     }
@@ -133,9 +135,11 @@ public class GamePanel extends JPanel implements Runnable{
         music.setFile(i);
         music.play();
         music.loop();
+        musicPlaying = true;
     }
     public void stopMusic(){
         music.stop();
+        musicPlaying = false;
     }
     public void playSE(int i){
         // sound effect (SE)
