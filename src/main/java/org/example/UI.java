@@ -44,6 +44,7 @@ public class UI {
     }
     public void drawPauseScreen(){
         String text = "PAUSED";
+        dText.MakeTextCenter(text, gp.screenHeight/2 - 100, this.g2, arial_40, Color.white);
     }
     public void drawPlayScreen(){
         if(gameFinished){

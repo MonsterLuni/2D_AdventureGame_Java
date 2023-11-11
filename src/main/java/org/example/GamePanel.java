@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.entity.Entity;
 import org.example.entity.Player;
 import org.example.object.SuperObject;
 import org.example.tile.TileManager;
@@ -42,6 +43,8 @@ public class GamePanel extends JPanel implements Runnable{
     // ENTITY AND OBJECT
     public SuperObject[] obj = new SuperObject[10];
     public Player player = new Player(this,keyH);
+    public Entity[] npc = new Entity[10];
+    public double drawInterval = (double) 1000000000 /FPS;
 
     // GAME STATE
     public int gameState;
@@ -60,6 +63,9 @@ public class GamePanel extends JPanel implements Runnable{
         System.out.println("Object loading started");
         aSetter.setObject();
         System.out.println("Object loading ended");
+        System.out.println("NPC loading started");
+        aSetter.setNPC();
+        System.out.println("NPC loading started");
         System.out.println("Music loading started");
         playMusic(0);
         System.out.println("Music loading ended");
@@ -71,7 +77,6 @@ public class GamePanel extends JPanel implements Runnable{
     }
     @Override
     public void run() {
-        double drawInterval = (double) 1000000000 /FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -97,8 +102,15 @@ public class GamePanel extends JPanel implements Runnable{
     public void update(){
         if(gameState == playState){
             player.update();
+            // NPC
+            for (Entity entity : npc) {
+                if (entity != null) {
+                    entity.update();
+                }
+            }
         } else if (gameState == pauseState) {
             // nothing
+            System.out.println("game_paused");
         }
     }
     public void paintComponent(Graphics g){
@@ -115,6 +127,12 @@ public class GamePanel extends JPanel implements Runnable{
         for (SuperObject object : obj) {
             if (object != null) {
                 object.draw(g2, this);
+            }
+        }
+        // NPC
+        for (Entity entity : npc) {
+            if (entity != null) {
+                entity.draw(g2);
             }
         }
         // PLAYER

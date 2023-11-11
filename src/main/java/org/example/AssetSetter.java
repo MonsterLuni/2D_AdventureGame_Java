@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.entity.NPC_Mage;
 import org.example.object.OBJ_Boots;
 import org.example.object.OBJ_Chest;
 import org.example.object.OBJ_Door;
@@ -19,5 +20,10 @@ public class AssetSetter {
         gp.obj[5] = new OBJ_Door(12 * gp.tileSize, 22 * gp.tileSize, this.gp);
         gp.obj[6] = new OBJ_Chest(10 * gp.tileSize, 7 * gp.tileSize, this.gp);
         gp.obj[7] = new OBJ_Boots(37 * gp.tileSize, 42 * gp.tileSize, this.gp);
+    }
+    public void setNPC(){
+        gp.npc[0] = new NPC_Mage(gp);
+        gp.npc[0].worldX = gp.tileSize*21;
+        gp.npc[0].worldY = gp.tileSize*21;
     }
 }

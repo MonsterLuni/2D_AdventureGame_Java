@@ -2,24 +2,18 @@ package org.example.entity;
 
 import org.example.GamePanel;
 import org.example.KeyHandler;
-import org.example.UtilityTool;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 public class Player extends Entity{
-    GamePanel gp;
     KeyHandler keyH;
-    private boolean pressing = false;
     public final int screenX;
     public final int screenY;
     public int animationDuration = 15;
     public int hasKey = 0;
     public Player(GamePanel gp, KeyHandler keyH){
-        this.gp = gp;
+        super(gp);
         this.keyH = keyH;
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
@@ -40,30 +34,18 @@ public class Player extends Entity{
     }
     public void getPlayerImage(){
         System.out.println("Player loading started");
-        up1 = setup("boy_up_1");
-        up2 = setup("boy_up_2");
-        down1 = setup("boy_down_1");
-        down2 = setup("boy_down_2");
-        left1 = setup("boy_left_1");
-        left2 = setup("boy_left_2");
-        right1 = setup("boy_right_1");
-        right2 = setup("boy_right_2");
+        up1 = setup("player","boy_up_1");
+        up2 = setup("player","boy_up_2");
+        down1 = setup("player","boy_down_1");
+        down2 = setup("player","boy_down_2");
+        left1 = setup("player","boy_left_1");
+        left2 = setup("player","boy_left_2");
+        right1 = setup("player","boy_right_1");
+        right2 = setup("player","boy_right_2");
         System.out.println("Player loading ended");
     }
-    public BufferedImage setup(String imageName){
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-        try{
-            image = ImageIO.read(new FileInputStream("src/main/res/player/" + imageName + ".png"));
-            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        }catch (IOException e){
-            System.out.println("Player loading error");
-            e.printStackTrace();
-        }
-        return image;
-    }
     public void update(){
-        pressing = false;
+        boolean pressing = false;
         if(keyH.upPressed){
             direction = "up";
             pressing = true;
@@ -83,6 +65,9 @@ public class Player extends Entity{
         //CHECK TILE COLLISION
         collisionOn = false;
         gp.cChecker.checkTile(this);
+        // CHECK NPC COLLISION
+        int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+        interactNPC(npcIndex);
         // CHECK OBJECT COLLISION
         int objIndex = gp.cChecker.checkObject(this, true);
         pickUpObject(objIndex);
@@ -149,38 +134,27 @@ public class Player extends Entity{
             }
         }
     }
+    public void interactNPC(int i){
+        if(i != 999){
+            System.out.println("NPC HIT");
+        }
+    }
     public void draw(Graphics2D g2){
         BufferedImage image = null;
         if(spriteNumber == 1){
             switch(direction){
-                case "up" -> {
-                    image = up1;
-                }
-                case "down" -> {
-                    image = down1;
-                }
-                case "left" -> {
-                    image = left1;
-                }
-                case "right" -> {
-                    image = right1;
-                }
+                case "up" -> image = up1;
+                case "down" -> image = down1;
+                case "left" -> image = left1;
+                case "right" -> image = right1;
             }
         }
         else{
             switch(direction){
-                case "up" -> {
-                    image = up2;
-                }
-                case "down" -> {
-                    image = down2;
-                }
-                case "left" -> {
-                    image = left2;
-                }
-                case "right" -> {
-                    image = right2;
-                }
+                case "up" -> image = up2;
+                case "down" -> image = down2;
+                case "left" -> image = left2;
+                case "right" -> image = right2;
             }
         }
         g2.drawImage(image, screenX, screenY,null);
