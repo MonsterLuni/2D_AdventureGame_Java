@@ -1,0 +1,190 @@
+@startuml
+class org.game.object.OBJ_Key {
+}
+abstract class org.game.entity.Entity {
+~ GamePanel gp
++ int worldX
++ int speed
++ BufferedImage up1
++ int actionLockCounter
++ String direction
++ int spriteCounter
++ int spriteNumber
+~ String[] dialogues
+~ int dialogueIndex
++ Rectangle solidArea
++ int solidAreaDefaultX
++ boolean collisionOn
++ BufferedImage setup(String,String)
++ void draw(Graphics2D)
++ void setAction()
++ void update()
++ void speak()
+}
+class org.game.entity.NPC_Mage {
++ void getImage()
++ void setDialogue()
++ void speak()
+}
+class org.game.DisplayText {
+~ GamePanel gp
+~ Graphics2D g2
++ void MakeText(String,int,int,Graphics2D,Font,Color)
++ void MakeTextCenter(String,int,int,Graphics2D,Font,Color)
+}
+abstract class org.game.object.SuperObject {
++ BufferedImage image
++ String name
++ boolean collision
++ int worldX
++ Rectangle solidArea
++ int solidAreaDefaultX
++ int solidAreaDefaultY
+~ UtilityTool uTool
++ void draw(Graphics2D,GamePanel)
+}
+class org.game.tile.TileManager {
+~ GamePanel gp
++ Tile[] tile
++ int[][] mapTileNum
++ void getTileImage()
++ void setup(int,String,boolean)
++ void loadMap(String)
++ void draw(Graphics2D)
+}
+class org.game.object.OBJ_Door {
+}
+class org.game.tile.Tile {
++ BufferedImage image
++ boolean collision
+}
+class org.game.Sound {
+~ Clip clip
+~ URL[] soundURL
++ void setFile(int)
++ void play()
++ void loop()
++ void stop()
+}
+class org.game.AssetSetter {
+~ GamePanel gp
++ void setObject()
++ void setNPC()
+}
+class org.game.UI {
+~ GamePanel gp
+~ Graphics2D g2
+~ Font arial_40
+~ Font Kay
+~ BufferedImage keyImage
+~ DisplayText dText
++ boolean messageOn
++ String message
+~ int messageCounter
+~ double playTime
++ String currentDialogue
+~ DecimalFormat dFormat
++ boolean gameFinished
++ int commandNum
++ int blinkOn
++ void showMessage(String)
++ void draw(Graphics2D)
++ void drawTitleScreen()
++ void drawPauseScreen()
++ void drawDialogueScreen()
++ void drawSubWindow(int,int,int,int)
++ void drawPlayScreen()
+}
+class org.game.entity.Player {
+~ KeyHandler keyH
++ int screenX
++ int screenY
++ int animationDuration
++ int hasKey
++ void setDefaultValues()
++ void getPlayerImage()
++ void update()
++ void pickUpObject(int)
++ void interactNPC(int)
++ void draw(Graphics2D)
+}
+class org.game.object.OBJ_Boots {
+}
+class org.game.KeyHandler {
++ boolean upPressed
+~ GamePanel gp
+~ UI ui
+~ boolean debug
++ void keyTyped(KeyEvent)
++ void keyPressed(KeyEvent)
++ void keyReleased(KeyEvent)
+}
+class org.game.CollisionDetection {
+~ GamePanel gp
++ void checkTile(Entity)
++ int checkObject(Entity,boolean)
++ int checkEntity(Entity,Entity[])
++ void checkPlayer(Entity)
+}
+class org.game.GamePanel {
+~ int originalTitleSize
+~ int scale
++ int tileSize
++ int maxScreenCol
++ int maxScreenRow
++ int screenWidth
++ int screenHeight
++ int maxWorldCol
++ int maxWorldRow
+~ int FPS
+~ int drawCount
+~ long timer
+~ int currentfps
+~ boolean musicPlaying
++ TileManager tileM
+~ Sound sEffects
+~ Sound music
+~ Font arial_20
++ UI ui
+~ KeyHandler keyH
++ CollisionDetection cChecker
++ AssetSetter aSetter
+~ Thread gameThread
++ SuperObject[] obj
++ Player player
++ Entity[] npc
++ double drawInterval
++ int gameState
++ int titleState
++ int playState
++ int pauseState
++ int dialogueState
++ void setupGame()
++ void startGameThread()
++ void run()
++ void update()
++ void paintComponent(Graphics)
++ void playMusic(int)
++ void stopMusic()
++ void playSE(int)
+}
+class org.game.object.OBJ_Chest {
+}
+class org.game.Main {
++ {static} void main(String[])
+}
+class org.game.UtilityTool {
++ BufferedImage scaleImage(BufferedImage,int,int)
+}
+
+
+org.game.object.SuperObject <|-- org.game.object.OBJ_Key
+org.game.entity.Entity <|-- org.game.entity.NPC_Mage
+org.game.object.SuperObject <|-- org.game.object.OBJ_Door
+org.game.entity.Entity <|-- org.game.entity.Player
+org.game.object.SuperObject <|-- org.game.object.OBJ_Boots
+java.awt.event.KeyListener <|.. org.game.KeyHandler
+org.game.Runnable <|.. org.game.GamePanel
+org.game.JPanel <|-- org.game.GamePanel
+org.game.object.SuperObject <|-- org.game.object.OBJ_Chest
+@enduml
