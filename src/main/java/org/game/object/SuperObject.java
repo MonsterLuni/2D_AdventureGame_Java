@@ -1,7 +1,7 @@
-package org.example.object;
+package org.game.object;
 
-import org.example.GamePanel;
-import org.example.UtilityTool;
+import org.game.GamePanel;
+import org.game.UtilityTool;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

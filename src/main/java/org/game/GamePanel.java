@@ -1,9 +1,9 @@
-package org.example;
+package org.game;
 
-import org.example.entity.Entity;
-import org.example.entity.Player;
-import org.example.object.SuperObject;
-import org.example.tile.TileManager;
+import org.game.entity.Entity;
+import org.game.entity.Player;
+import org.game.object.SuperObject;
+import org.game.tile.TileManager;
 
 import javax.sound.sampled.FloatControl;
 import javax.swing.*;
@@ -31,6 +31,7 @@ public class GamePanel extends JPanel implements Runnable{
     15 million fps
     11 million fps
     8 million fps
+    4.5 million fps
      */
     //SYSTEM
     public TileManager tileM = new TileManager(this);
@@ -50,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     // GAME STATE
     public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
@@ -70,10 +72,7 @@ public class GamePanel extends JPanel implements Runnable{
         System.out.println("NPC loading started");
         aSetter.setNPC();
         System.out.println("NPC loading started");
-        System.out.println("Music loading started");
-        playMusic(0);
-        System.out.println("Music loading ended");
-        gameState = playState;
+        gameState = titleState;
     }
     public void startGameThread(){
         gameThread = new Thread(this);
@@ -125,24 +124,31 @@ public class GamePanel extends JPanel implements Runnable{
         if(keyH.debug){
             drawStart = System.nanoTime();
         }
-        // TILE
-        tileM.draw(g2);
-        // OBJECT
-        for (SuperObject object : obj) {
-            if (object != null) {
-                object.draw(g2, this);
-            }
+        // TITLE SCREEN
+        if(gameState == titleState){
+            ui.draw(g2);
         }
-        // NPC
-        for (Entity entity : npc) {
-            if (entity != null) {
-                entity.draw(g2);
+        // OTHERS
+        else{
+            // TILE
+            tileM.draw(g2);
+            // OBJECT
+            for (SuperObject object : obj) {
+                if (object != null) {
+                    object.draw(g2, this);
+                }
             }
+            // NPC
+            for (Entity entity : npc) {
+                if (entity != null) {
+                    entity.draw(g2);
+                }
+            }
+            // PLAYER
+            player.draw(g2);
+            // UI
+            ui.draw(g2);
         }
-        // PLAYER
-        player.draw(g2);
-        // UI
-        ui.draw(g2);
         // DEBUG
         if(keyH.debug){
             double drawEnd = System.nanoTime();
@@ -157,6 +163,7 @@ public class GamePanel extends JPanel implements Runnable{
         g2.dispose(); // saves memory because it's deleted
     }
     public void playMusic(int i){
+        System.out.println("MUSIC IS PLAYING");
         music.setFile(i);
         FloatControl control = (FloatControl) music.clip.getControl(FloatControl.Type.MASTER_GAIN);
         control.setValue(-12.0f);

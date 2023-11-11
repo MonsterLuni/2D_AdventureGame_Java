@@ -1,6 +1,6 @@
-package org.example.entity;
+package org.game.entity;
 
-import org.example.GamePanel;
+import org.game.GamePanel;
 
 public class NPC_Mage extends Entity{
     public NPC_Mage(GamePanel gp){
@@ -23,6 +23,7 @@ public class NPC_Mage extends Entity{
         dialogues[1] = "It's dangerous to be here...";
         dialogues[2] = "What are you doing here?";
         dialogues[3] = "Crazy? I was Crazy once, \n they locked me in a Room. \n a rubber room.";
+        dialogues[4] = "Don't go in the forest!";
     }
     @Override
     public void speak(){

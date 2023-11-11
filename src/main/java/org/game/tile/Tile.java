@@ -1,4 +1,4 @@
-package org.example.tile;
+package org.game.tile;
 
 import java.awt.image.BufferedImage;
 

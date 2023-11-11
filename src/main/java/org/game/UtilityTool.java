@@ -1,4 +1,4 @@
-package org.example;
+package org.game;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

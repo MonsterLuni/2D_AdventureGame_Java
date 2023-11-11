@@ -1,7 +1,7 @@
-package org.example.entity;
+package org.game.entity;
 
-import org.example.GamePanel;
-import org.example.UtilityTool;
+import org.game.GamePanel;
+import org.game.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package org.example;
+package org.game;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -62,6 +62,38 @@ public class KeyHandler implements KeyListener {
         else if(gp.gameState == gp.dialogueState){
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE -> gp.gameState = gp.playState;
+            }
+        }
+        //
+        else if(gp.gameState == gp.titleState){
+            switch (e.getKeyCode()){
+                case KeyEvent.VK_W, KeyEvent.VK_UP -> {
+                    ui.commandNum--;
+                    if(ui.commandNum < 0){
+                        gp.ui.commandNum = 2;
+                    }
+                    ui.blinkOn = 0;
+                }
+                case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
+                    ui.commandNum++;
+                    if(ui.commandNum > 2){
+                        ui.commandNum = 0;
+                    }
+                    ui.blinkOn = 0;
+                }
+                case KeyEvent.VK_ENTER, KeyEvent.VK_SPACE -> {
+                    switch (ui.commandNum){
+                        case 0 -> {
+                            gp.gameState = gp.playState;
+                            System.out.println("Music loading started");
+                            gp.playMusic(0);
+                            System.out.println("Music loading ended");
+                        }
+                        case 1 -> System.out.println("Coming soon...");
+                        case 2 -> System.exit(0);
+                    }
+                }
+
             }
         }
     }

@@ -1,6 +1,6 @@
-package org.example.object;
+package org.game.object;
 
-import org.example.GamePanel;
+import org.game.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.io.FileInputStream;

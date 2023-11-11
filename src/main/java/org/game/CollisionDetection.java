@@ -1,6 +1,6 @@
-package org.example;
+package org.game;
 
-import org.example.entity.Entity;
+import org.game.entity.Entity;
 
 public class CollisionDetection {
     GamePanel gp;

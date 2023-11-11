@@ -1,7 +1,7 @@
-package org.example.tile;
+package org.game.tile;
 
-import org.example.GamePanel;
-import org.example.UtilityTool;
+import org.game.GamePanel;
+import org.game.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -69,7 +69,6 @@ public class TileManager {
         System.out.println("Map loading ended");
     }
     public void draw(Graphics2D g2){
-
         int worldCol = 0;
         int worldRow = 0;
 

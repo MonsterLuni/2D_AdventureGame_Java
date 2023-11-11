@@ -1,18 +1,18 @@
-package org.example.object;
+package org.game.object;
 
-import org.example.GamePanel;
+import org.game.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class OBJ_Key extends SuperObject {
-    public OBJ_Key(int x, int y, GamePanel gp){
-        name = "Key";
+public class OBJ_Chest extends SuperObject {
+    public OBJ_Chest(int x,int y, GamePanel gp){
+        name = "Chest";
         this.worldX = x;
         this.worldY = y;
         try{
-            image = ImageIO.read(new FileInputStream("src/main/res/objects/Key.png"));
+            image = ImageIO.read(new FileInputStream("src/main/res/objects/chest.png"));
             uTool.scaleImage(image, gp.tileSize, gp.tileSize);
         }catch (IOException e){
             e.printStackTrace();

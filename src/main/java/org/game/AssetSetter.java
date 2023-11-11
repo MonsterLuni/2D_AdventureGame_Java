@@ -1,10 +1,10 @@
-package org.example;
+package org.game;
 
-import org.example.entity.NPC_Mage;
-import org.example.object.OBJ_Boots;
-import org.example.object.OBJ_Chest;
-import org.example.object.OBJ_Door;
-import org.example.object.OBJ_Key;
+import org.game.entity.NPC_Mage;
+import org.game.object.OBJ_Boots;
+import org.game.object.OBJ_Chest;
+import org.game.object.OBJ_Door;
+import org.game.object.OBJ_Key;
 
 public class AssetSetter {
     GamePanel gp;

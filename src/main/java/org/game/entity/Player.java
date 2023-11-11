@@ -1,7 +1,7 @@
-package org.example.entity;
+package org.game.entity;
 
-import org.example.GamePanel;
-import org.example.KeyHandler;
+import org.game.GamePanel;
+import org.game.KeyHandler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
