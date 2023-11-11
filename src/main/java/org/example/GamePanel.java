@@ -5,6 +5,7 @@ import org.example.entity.Player;
 import org.example.object.SuperObject;
 import org.example.tile.TileManager;
 
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 
@@ -35,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable{
     public TileManager tileM = new TileManager(this);
     Sound sEffects = new Sound();
     Sound music = new Sound();
+    Font arial_20;
     public UI ui = new UI(this);
     KeyHandler keyH = new KeyHandler(this, this.ui);
     public CollisionDetection cChecker = new CollisionDetection(this);
@@ -50,6 +52,7 @@ public class GamePanel extends JPanel implements Runnable{
     public int gameState;
     public final int playState = 1;
     public final int pauseState = 2;
+    public final int dialogueState = 3;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -57,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        arial_20 = new Font("arial", Font.ITALIC, 20);
     }
 
     public void setupGame(){
@@ -143,14 +147,19 @@ public class GamePanel extends JPanel implements Runnable{
         if(keyH.debug){
             double drawEnd = System.nanoTime();
             double passed = drawEnd - drawStart;
+            g2.setFont(arial_20);
+            g2.setColor(Color.white);
             g2.drawString("Draw Time: " + ui.dFormat.format(passed / 1000000) + "ms", 10, 100);
-            g2.drawString("FPS: " + currentfps, 10, 150);
-            g2.drawString("MusicPlaying: " + musicPlaying, 10, 200);
+            g2.drawString("FPS: " + currentfps, 10, 130);
+            g2.drawString("Music (F2): " + musicPlaying, 10, 160);
+            g2.drawString("Time: " + ui.dFormat.format(ui.playTime) + "s", 10, 190);
         }
         g2.dispose(); // saves memory because it's deleted
     }
     public void playMusic(int i){
         music.setFile(i);
+        FloatControl control = (FloatControl) music.clip.getControl(FloatControl.Type.MASTER_GAIN);
+        control.setValue(-12.0f);
         music.play();
         music.loop();
         musicPlaying = true;

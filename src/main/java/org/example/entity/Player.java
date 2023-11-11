@@ -27,7 +27,8 @@ public class Player extends Entity{
         getPlayerImage();
     }
     public void setDefaultValues(){
-        worldX = gp.tileSize * 40;
+        //TODO: make that this is in the middle
+        worldX = gp.tileSize * gp.maxWorldCol/2 - gp.tileSize * 2;
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
@@ -136,7 +137,11 @@ public class Player extends Entity{
     }
     public void interactNPC(int i){
         if(i != 999){
-            System.out.println("NPC HIT");
+            if(keyH.ePressed){
+                gp.gameState = gp.dialogueState;
+                gp.npc[i].speak();
+                keyH.ePressed = false;
+            }
         }
     }
     public void draw(Graphics2D g2){

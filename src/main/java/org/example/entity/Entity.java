@@ -22,6 +22,8 @@ public abstract class Entity {
     public String direction;
     public int spriteCounter = 0;
     public int spriteNumber = 1;
+    String[] dialogues = new String[20];
+    int dialogueIndex = 0;
 
     public Rectangle solidArea = new Rectangle(0,0,48,48);
     public int solidAreaDefaultX, solidAreaDefaultY;
@@ -92,6 +94,20 @@ public abstract class Entity {
                 case "left" -> worldX -= speed;
                 case "right" -> worldX += speed;
             }
+        }
+    }
+    public void speak(){
+        gp.ui.currentDialogue = dialogues[dialogueIndex];
+        dialogueIndex++;
+        if(dialogues[dialogueIndex] == null){
+            dialogueIndex = 0;
+        }
+        switch (gp.player.direction){
+            case "up" -> direction = "down";
+            case "down" -> direction = "up";
+            case "left" -> direction = "right";
+            case "right" -> direction = "left";
+
         }
     }
 }
