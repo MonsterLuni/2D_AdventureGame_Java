@@ -67,9 +67,15 @@ public class EventHandler {
     }
     public void healingPool(int gameState){
         if(gp.keyH.ePressed){
-            gp.gameState = gameState;
-            gp.ui.currentDialogue = "You feel refreshed!";
-            gp.player.life++;
+            if(gp.player.life + 1 > gp.player.maxLife){
+                gp.gameState = gameState;
+                gp.ui.currentDialogue = "You are no longer thirsty";
+            }
+            else {
+                gp.gameState = gameState;
+                gp.ui.currentDialogue = "You feel refreshed!";
+                gp.player.life++;
+            }
         }
     }
 }

@@ -52,12 +52,8 @@ public class CollisionDetection {
 
         for(int i = 0; i < gp.obj.length; i++){
             if(gp.obj[i] != null){
-                //Get entity's solid are position
-                entity.solidArea.x = entity.worldX + entity.solidArea.x;
-                entity.solidArea.y = entity.worldY + entity.solidArea.y;
-                // Get the object's solid area position
-                gp.obj[i].solidArea.x = gp.obj[i].worldX + gp.obj[i].solidArea.x;
-                gp.obj[i].solidArea.y = gp.obj[i].worldY + gp.obj[i].solidArea.y;
+                getSolidAreaPosition(entity);
+                getSolidAreaPosition(gp.obj[i]);
 
                 entityDirection(entity);
 
@@ -69,10 +65,8 @@ public class CollisionDetection {
                         index = i;
                     }
                 }
-                entity.solidArea.x = entity.solidAreaDefaultX;
-                entity.solidArea.y = entity.solidAreaDefaultY;
-                gp.obj[i].solidArea.x = gp.obj[i].solidAreaDefaultX;
-                gp.obj[i].solidArea.y = gp.obj[i].solidAreaDefaultY;
+                setSolidAreaPositionDefault(entity);
+                setSolidAreaPositionDefault(gp.obj[i]);
             }
         }
         return index;
@@ -83,12 +77,8 @@ public class CollisionDetection {
 
         for(int i = 0; i < target.length; i++){
             if(target[i] != null){
-                //Get entity's solid are position
-                entity.solidArea.x = entity.worldX + entity.solidArea.x;
-                entity.solidArea.y = entity.worldY + entity.solidArea.y;
-                // Get the object's solid area position
-                target[i].solidArea.x = target[i].worldX + target[i].solidArea.x;
-                target[i].solidArea.y = target[i].worldY + target[i].solidArea.y;
+                getSolidAreaPosition(entity);
+                getSolidAreaPosition(target[i]);
 
                 entityDirection(entity);
 
@@ -98,33 +88,28 @@ public class CollisionDetection {
                         index = i;
                     }
                 }
-                entity.solidArea.x = entity.solidAreaDefaultX;
-                entity.solidArea.y = entity.solidAreaDefaultY;
-                target[i].solidArea.x = target[i].solidAreaDefaultX;
-                target[i].solidArea.y = target[i].solidAreaDefaultY;
+                setSolidAreaPositionDefault(entity);
+                setSolidAreaPositionDefault(target[i]);
             }
         }
         return index;
     }
-    public void checkPlayer(Entity entity){
+    public boolean checkPlayer(Entity entity){
+        boolean contactPlayer = false;
         if(gp.player != null) {
-            //Get entity's solid are position
-            entity.solidArea.x = entity.worldX + entity.solidArea.x;
-            entity.solidArea.y = entity.worldY + entity.solidArea.y;
-            // Get the object's solid area position
-            gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
-            gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+            getSolidAreaPosition(entity);
+            getSolidAreaPosition(gp.player);
 
             entityDirection(entity);
 
             if (entity.solidArea.intersects(gp.player.solidArea)) {
                 entity.collisionOn = true;
+                contactPlayer = true;
             }
-            entity.solidArea.x = entity.solidAreaDefaultX;
-            entity.solidArea.y = entity.solidAreaDefaultY;
-            gp.player.solidArea.x = gp.player.solidAreaDefaultX;
-            gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+            setSolidAreaPositionDefault(entity);
+            setSolidAreaPositionDefault(gp.player);
         }
+        return contactPlayer;
     }
     public void entityDirection(Entity entity){
         switch (entity.direction){
@@ -133,5 +118,13 @@ public class CollisionDetection {
             case "left" -> entity.solidArea.x -= entity.speed;
             case "right" -> entity.solidArea.x += entity.speed;
         }
+    }
+    public void getSolidAreaPosition(Entity entity){
+        entity.solidArea.x = entity.worldX + entity.solidArea.x;
+        entity.solidArea.y = entity.worldY + entity.solidArea.y;
+    }
+    public void setSolidAreaPositionDefault(Entity entity){
+        entity.solidArea.x = entity.solidAreaDefaultX;
+        entity.solidArea.y = entity.solidAreaDefaultY;
     }
 }

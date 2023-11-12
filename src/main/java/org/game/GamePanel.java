@@ -10,7 +10,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
 public class GamePanel extends JPanel implements Runnable{
     // SCREEN SETTINGS
     final int originalTitleSize = 16; //16x16 tile
@@ -163,6 +162,7 @@ public class GamePanel extends JPanel implements Runnable{
             }
             for (Entity monster : monster) {
                 if (monster != null) {
+                    System.out.println(monster);
                     entityList.add(monster);
                 }
             }
@@ -174,8 +174,8 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             });
             // DRAW ENTITIES
-            for (int i = 0; i < entityList.size(); i++){
-                entityList.get(i).draw(g2);
+            for (Entity entity : entityList) {
+                entity.draw(g2);
             }
             // EMPTY ENTITY LIST
             for (int i = 0; i < entityList.size(); i++){
@@ -194,6 +194,8 @@ public class GamePanel extends JPanel implements Runnable{
             g2.drawString("FPS: " + currentfps, 10, 190);
             g2.drawString("Music (F2): " + musicPlaying, 10, 220);
             g2.drawString("Time: " + ui.dFormat.format(ui.playTime) + "s", 10, 250);
+            g2.drawString("Invincible: " + player.invincible, 10, 280);
+            g2.drawString("InvincibleCounter: " + player.invincibleCounter, 10, 310);
         }
         g2.dispose(); // saves memory because it's deleted
     }

@@ -8,8 +8,9 @@ import java.util.Random;
 public class MON_GreenSlime extends Entity {
     public MON_GreenSlime(GamePanel gp) {
         super(gp);
+        type = 2;
         name = "Green Slime";
-        speed = 2;
+        speed = 1;
         maxLife = 4;
         life = maxLife;
         actionLockCounterNumber = 60;

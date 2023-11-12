@@ -28,6 +28,7 @@ public class KeyHandler implements KeyListener {
                 case KeyEvent.VK_D -> rightPressed = true;
                 case KeyEvent.VK_E -> ePressed = true;
                 case KeyEvent.VK_T -> gp.player.life--;
+                case KeyEvent.VK_ENTER -> gp.player.attacking = true;
                 case KeyEvent.VK_ESCAPE -> {
                     gp.gameState = gp.pauseState;
                     gp.FPS = 5;
