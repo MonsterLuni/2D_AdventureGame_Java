@@ -1,22 +1,22 @@
 package org.game.object;
 
 import org.game.GamePanel;
+import org.game.entity.Entity;
 
-import javax.imageio.ImageIO;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-public class OBJ_Door extends SuperObject {
-    public OBJ_Door(int x,int y, GamePanel gp){
-        name = "Door";
+public class OBJ_Door extends Entity {
+    public OBJ_Door(int x, int y, GamePanel gp){
+        super(gp);
         this.worldX = x;
         this.worldY = y;
-        try{
-            image = ImageIO.read(new FileInputStream("src/main/res/objects/door.png"));
-            uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        name = "Door";
+        down1 = setup("objects","door");
         collision = true;
+        // Make door top smaller
+        solidArea.x = 0;
+        solidArea.y = 16;
+        solidArea.width = 48;
+        solidArea.height = 32;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
     }
 }

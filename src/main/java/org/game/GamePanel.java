@@ -2,12 +2,14 @@ package org.game;
 
 import org.game.entity.Entity;
 import org.game.entity.Player;
-import org.game.object.SuperObject;
 import org.game.tile.TileManager;
 
 import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable{
     // SCREEN SETTINGS
@@ -32,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable{
     11 million fps
     8 million fps
     4.5 million fps
+    3.5 million fps
      */
     //SYSTEM
     public TileManager tileM = new TileManager(this);
@@ -39,14 +42,17 @@ public class GamePanel extends JPanel implements Runnable{
     Sound music = new Sound();
     Font arial_20;
     public UI ui = new UI(this);
+    public EventHandler eHandler = new EventHandler(this);
     KeyHandler keyH = new KeyHandler(this, this.ui);
     public CollisionDetection cChecker = new CollisionDetection(this);
     public AssetSetter aSetter = new AssetSetter(this);
     Thread gameThread;
     // ENTITY AND OBJECT
-    public SuperObject[] obj = new SuperObject[10];
     public Player player = new Player(this,keyH);
+    public Entity[] obj = new Entity[10];
     public Entity[] npc = new Entity[10];
+    public Entity[] monster = new Entity[10];
+    ArrayList<Entity> entityList = new ArrayList<>();
     public double drawInterval = (double) 1000000000 /FPS;
 
     // GAME STATE
@@ -55,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+    public final int settingsScreen = 4;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -72,6 +79,9 @@ public class GamePanel extends JPanel implements Runnable{
         System.out.println("NPC loading started");
         aSetter.setNPC();
         System.out.println("NPC loading started");
+        System.out.println("Monster loading started");
+        aSetter.setMonster();
+        System.out.println("Monster loading started");
         gameState = titleState;
     }
     public void startGameThread(){
@@ -111,6 +121,12 @@ public class GamePanel extends JPanel implements Runnable{
                     entity.update();
                 }
             }
+            // Monster
+            for (Entity monster : monster) {
+                if (monster != null) {
+                    monster.update();
+                }
+            }
         } else if (gameState == pauseState) {
             // nothing
             System.out.println("game_paused");
@@ -132,20 +148,39 @@ public class GamePanel extends JPanel implements Runnable{
         else{
             // TILE
             tileM.draw(g2);
-            // OBJECT
-            for (SuperObject object : obj) {
-                if (object != null) {
-                    object.draw(g2, this);
-                }
-            }
-            // NPC
+
+            // ADD ENTITIES TO LIST
+            entityList.add(player);
             for (Entity entity : npc) {
                 if (entity != null) {
-                    entity.draw(g2);
+                    entityList.add(entity);
                 }
             }
-            // PLAYER
-            player.draw(g2);
+            for (Entity object : obj) {
+                if (object != null) {
+                    entityList.add(object);
+                }
+            }
+            for (Entity monster : monster) {
+                if (monster != null) {
+                    entityList.add(monster);
+                }
+            }
+            // SORT
+            Collections.sort(entityList, new Comparator<Entity>() {
+                @Override
+                public int compare(Entity e1, Entity e2) {
+                    return Integer.compare(e1.worldY,e2.worldY);
+                }
+            });
+            // DRAW ENTITIES
+            for (int i = 0; i < entityList.size(); i++){
+                entityList.get(i).draw(g2);
+            }
+            // EMPTY ENTITY LIST
+            for (int i = 0; i < entityList.size(); i++){
+                entityList.remove(i);
+            }
             // UI
             ui.draw(g2);
         }
@@ -155,10 +190,10 @@ public class GamePanel extends JPanel implements Runnable{
             double passed = drawEnd - drawStart;
             g2.setFont(arial_20);
             g2.setColor(Color.white);
-            g2.drawString("Draw Time: " + ui.dFormat.format(passed / 1000000) + "ms", 10, 100);
-            g2.drawString("FPS: " + currentfps, 10, 130);
-            g2.drawString("Music (F2): " + musicPlaying, 10, 160);
-            g2.drawString("Time: " + ui.dFormat.format(ui.playTime) + "s", 10, 190);
+            g2.drawString("Draw Time: " + ui.dFormat.format(passed / 1000000) + "ms", 10, 160);
+            g2.drawString("FPS: " + currentfps, 10, 190);
+            g2.drawString("Music (F2): " + musicPlaying, 10, 220);
+            g2.drawString("Time: " + ui.dFormat.format(ui.playTime) + "s", 10, 250);
         }
         g2.dispose(); // saves memory because it's deleted
     }

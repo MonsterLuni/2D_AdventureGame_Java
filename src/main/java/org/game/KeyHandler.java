@@ -27,6 +27,7 @@ public class KeyHandler implements KeyListener {
                 case KeyEvent.VK_S -> downPressed = true;
                 case KeyEvent.VK_D -> rightPressed = true;
                 case KeyEvent.VK_E -> ePressed = true;
+                case KeyEvent.VK_T -> gp.player.life--;
                 case KeyEvent.VK_ESCAPE -> {
                     gp.gameState = gp.pauseState;
                     gp.FPS = 5;
@@ -64,19 +65,19 @@ public class KeyHandler implements KeyListener {
                 case KeyEvent.VK_ESCAPE -> gp.gameState = gp.playState;
             }
         }
-        //
+        // TITLE STATE
         else if(gp.gameState == gp.titleState){
             switch (e.getKeyCode()){
                 case KeyEvent.VK_W, KeyEvent.VK_UP -> {
                     ui.commandNum--;
                     if(ui.commandNum < 0){
-                        gp.ui.commandNum = 2;
+                        gp.ui.commandNum = 3;
                     }
                     ui.blinkOn = 0;
                 }
                 case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
                     ui.commandNum++;
-                    if(ui.commandNum > 2){
+                    if(ui.commandNum > 3){
                         ui.commandNum = 0;
                     }
                     ui.blinkOn = 0;
@@ -90,10 +91,19 @@ public class KeyHandler implements KeyListener {
                             System.out.println("Music loading ended");
                         }
                         case 1 -> System.out.println("Coming soon...");
-                        case 2 -> System.exit(0);
+                        case 2 -> gp.gameState = gp.settingsScreen;
+                        case 3 -> System.exit(0);
                     }
                 }
 
+            }
+        }
+        // SETTINGS STATE
+        else if(gp.gameState == gp.settingsScreen){
+            switch (e.getKeyCode()){
+                case KeyEvent.VK_ESCAPE -> {
+                    gp.gameState = gp.titleState;
+                }
             }
         }
     }

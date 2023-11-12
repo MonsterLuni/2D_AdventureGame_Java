@@ -19,11 +19,20 @@ public abstract class Entity {
     public int speed;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public int actionLockCounter = 0;
-    public String direction;
+    public int actionLockCounterNumber = 120;
+    public String direction = "down";
     public int spriteCounter = 0;
     public int spriteNumber = 1;
     String[] dialogues = new String[20];
     int dialogueIndex = 0;
+    // From former SuperObject
+    public BufferedImage image, image2, image3;
+    public String name;
+    public boolean collision = false;
+
+    // CHARACTER STATUS
+    public int maxLife;
+    public int life;
 
     public Rectangle solidArea = new Rectangle(0,0,48,48);
     public int solidAreaDefaultX, solidAreaDefaultY;
@@ -59,7 +68,7 @@ public abstract class Entity {
     }
     public void setAction(){
         actionLockCounter++;
-        if(actionLockCounter == 120){
+        if(actionLockCounter == actionLockCounterNumber){
             Random random = new Random();
             int i = random.nextInt(100)+1;
             if(i <= 25){
@@ -83,6 +92,8 @@ public abstract class Entity {
         collisionOn = false;
         gp.cChecker.checkTile(this);
         gp.cChecker.checkObject(this, false);
+        gp.cChecker.checkEntity(this, gp.npc);
+        gp.cChecker.checkEntity(this, gp.monster);
         gp.cChecker.checkPlayer(this);
 
         spriteNumber = 1;

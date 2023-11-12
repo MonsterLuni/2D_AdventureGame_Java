@@ -32,6 +32,9 @@ public class Player extends Entity{
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
+        // PLAYER SATUS
+        maxLife = 10;
+        life = maxLife;
     }
     public void getPlayerImage(){
         System.out.println("Player loading started");
@@ -69,9 +72,15 @@ public class Player extends Entity{
         // CHECK NPC COLLISION
         int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
         interactNPC(npcIndex);
+        // CHECK MONSTER COLLISION
+        int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+        // CHECK EVENT
+        gp.eHandler.checkEvent();
         // CHECK OBJECT COLLISION
         int objIndex = gp.cChecker.checkObject(this, true);
         pickUpObject(objIndex);
+        //ePressed FALSE
+        keyH.ePressed = false;
         //IF COLLISION IS FALSE, THE PLAYER CAN MOVE
         if(pressing){
             spriteCounter++;
@@ -140,7 +149,6 @@ public class Player extends Entity{
             if(keyH.ePressed){
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
-                keyH.ePressed = false;
             }
         }
     }

@@ -1,21 +1,15 @@
 package org.game.object;
 
 import org.game.GamePanel;
+import org.game.entity.Entity;
 
-import javax.imageio.ImageIO;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-public class OBJ_Key extends SuperObject {
+public class OBJ_Key extends Entity {
     public OBJ_Key(int x, int y, GamePanel gp){
-        name = "Key";
+        super(gp);
         this.worldX = x;
         this.worldY = y;
-        try{
-            image = ImageIO.read(new FileInputStream("src/main/res/objects/Key.png"));
-            uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+
+        name = "Key";
+        down1 = setup("objects", "Key");
     }
 }

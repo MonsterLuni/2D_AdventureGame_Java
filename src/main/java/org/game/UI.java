@@ -1,5 +1,7 @@
 package org.game;
 
+import org.game.entity.Entity;
+import org.game.object.OBJ_Heart;
 import org.game.object.OBJ_Key;
 
 import java.awt.*;
@@ -15,6 +17,7 @@ public class UI {
     Font Kay;
     BufferedImage keyImage;
     DisplayText dText;
+    BufferedImage heart_full, heart_half, heart_broken;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
@@ -39,7 +42,12 @@ public class UI {
         System.out.println("Font loading started");
         OBJ_Key key = new OBJ_Key(0,0, this.gp);
         dText = new DisplayText(this.gp);
-        keyImage = key.image;
+        keyImage = key.down1;
+        // CREATE HUD OBJECT
+        Entity heart = new OBJ_Heart(gp);
+        heart_full = heart.image;
+        heart_half = heart.image2;
+        heart_broken = heart.image3;
     }
     public void showMessage(String text){
         message = text;
@@ -51,9 +59,41 @@ public class UI {
         g2.setColor(Color.white);
         switch (gp.gameState){
             case 0 -> drawTitleScreen();
-            case 1 -> drawPlayScreen();
-            case 2 -> drawPauseScreen();
-            case 3 -> drawDialogueScreen();
+            case 1 -> {
+                drawPlayerLife();
+                drawPlayScreen();
+            }
+            case 2 -> {
+                drawPlayerLife();
+                drawPauseScreen();
+            }
+            case 3 -> {
+                drawPlayerLife();
+                drawDialogueScreen();
+            }
+            case 4 -> drawSettingsScreen();
+        }
+    }
+    public void drawPlayerLife(){
+        int i = 0;
+        int x = gp.tileSize / 2;
+        // DRAW MAX LIFE
+        while(i < gp.player.maxLife/2){
+            g2.drawImage(heart_broken, x, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
+            x += gp.tileSize;
+            i++;
+        }
+        i = 0;
+        x = gp.tileSize / 2;
+        // DRAW CURRENT LIFE
+        while (i < gp.player.life){
+            g2.drawImage(heart_half, x, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
+            i++;
+            if(i < gp.player.life){
+                g2.drawImage(heart_full, x, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
+            }
+            i++;
+            x += gp.tileSize;
         }
     }
     public void drawTitleScreen(){
@@ -75,19 +115,29 @@ public class UI {
         // MENU
         dText.MakeTextCenter("NEW GAME",0,gp.tileSize*7,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
         dText.MakeTextCenter("LOAD GAME",0,gp.tileSize*8,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
-        dText.MakeTextCenter("QUIT",0,gp.tileSize*9,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
+        dText.MakeTextCenter("SETTINGS",0,gp.tileSize*9,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
+        dText.MakeTextCenter("QUIT",0,gp.tileSize*10,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
 
         if(blinkOn < 30){
             switch (commandNum){
                 case 0 -> dText.MakeText(">",(gp.tileSize*9)/2,gp.tileSize*7,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
                 case 1 -> dText.MakeText(">",(gp.tileSize*9)/2 - 10,gp.tileSize*8,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
-                case 2 -> dText.MakeText(">",(gp.tileSize*12)/2,gp.tileSize*9,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
+                case 2 -> dText.MakeText(">",(gp.tileSize*9)/2 + 10,gp.tileSize*9,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
+                case 3 -> dText.MakeText(">",(gp.tileSize*12)/2,gp.tileSize*10,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
             }
         }
         if(blinkOn > 60) {
             blinkOn = 0;
         }
         blinkOn++;
+    }
+    public void drawSettingsScreen(){
+        // BACKGROUND
+        g2.setColor(new Color(0,0,0));
+        g2.fillRect(0,0, gp.screenWidth, gp.screenHeight);
+
+        String text = "SETTINGS";
+        dText.MakeTextCenter(text,0, gp.screenHeight/2 - 100, this.g2, arial_40, Color.white);
     }
     public void drawPauseScreen(){
         String text = "PAUSED";
@@ -131,8 +181,8 @@ public class UI {
         }
         else{
             // DRAW AMOUNT OF KEY
-            g2.drawImage(keyImage, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
-            dText.MakeText("x " + gp.player.hasKey,70,60,g2,arial_40,Color.white);
+            g2.drawImage(keyImage, gp.tileSize / 2, gp.tileSize*2, gp.tileSize, gp.tileSize, null);
+            dText.MakeText("x " + gp.player.hasKey,70,gp.tileSize*2 + 40,g2,arial_40,Color.white);
 
             // TIME
             playTime += (double)1/gp.FPS;
