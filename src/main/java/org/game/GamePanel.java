@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable{
     8 million fps
     4.5 million fps
     3.5 million fps
+    1 million fps
      */
     //SYSTEM
     public TileManager tileM = new TileManager(this);
