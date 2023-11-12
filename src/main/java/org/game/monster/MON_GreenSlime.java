@@ -3,8 +3,6 @@ package org.game.monster;
 import org.game.GamePanel;
 import org.game.entity.Entity;
 
-import java.util.Random;
-
 public class MON_GreenSlime extends Entity {
     public MON_GreenSlime(GamePanel gp) {
         super(gp);

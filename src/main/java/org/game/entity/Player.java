@@ -2,7 +2,6 @@ package org.game.entity;
 
 import org.game.GamePanel;
 import org.game.KeyHandler;
-import org.game.object.OBJ_Key;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
