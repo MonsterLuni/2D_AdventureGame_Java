@@ -2,6 +2,7 @@ package org.game.entity;
 
 import org.game.GamePanel;
 import org.game.KeyHandler;
+import org.game.object.OBJ_Key;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -294,7 +295,7 @@ public class Player extends Entity{
                 gp.monster[i].life--;
                 gp.monster[i].invincible = true;
                 if(gp.monster[i].life <= 0){
-                    gp.monster[i] = null;
+                    gp.monster[i].dying = true;
                 }
             }
         }

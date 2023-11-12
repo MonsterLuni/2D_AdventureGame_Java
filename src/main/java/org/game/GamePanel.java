@@ -121,9 +121,15 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
             // Monster
-            for (Entity monster : monster) {
-                if (monster != null) {
-                    monster.update();
+            for (int i = 0; i < monster.length; i++) {
+                //TODO: What the actual fuck is going on here
+                if (monster[i] != null) {
+                    if(monster[i].alive && !monster[i].dying){
+                        monster[i].update();
+                    }
+                    else {
+                        monster[i] = null;
+                    }
                 }
             }
         } else if (gameState == pauseState) {
@@ -155,24 +161,18 @@ public class GamePanel extends JPanel implements Runnable{
                     entityList.add(entity);
                 }
             }
+            for (Entity monster : monster) {
+                if (monster != null) {
+                    entityList.add(monster);
+                }
+            }
             for (Entity object : obj) {
                 if (object != null) {
                     entityList.add(object);
                 }
             }
-            for (Entity monster : monster) {
-                if (monster != null) {
-                    System.out.println(monster);
-                    entityList.add(monster);
-                }
-            }
             // SORT
-            Collections.sort(entityList, new Comparator<Entity>() {
-                @Override
-                public int compare(Entity e1, Entity e2) {
-                    return Integer.compare(e1.worldY,e2.worldY);
-                }
-            });
+            entityList.sort(Comparator.comparingInt(e -> e.worldY));
             // DRAW ENTITIES
             for (Entity entity : entityList) {
                 entity.draw(g2);

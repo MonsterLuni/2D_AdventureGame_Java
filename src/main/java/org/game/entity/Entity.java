@@ -44,6 +44,9 @@ public abstract class Entity {
     public Rectangle attackArea = new Rectangle(0,0,0,0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
+    public boolean alive = true;
+    public boolean dying = false;
+    int dyingCounter = 0;
     public int type;
     public BufferedImage setup(String packagePath, String imageName, int width, int height){
         UtilityTool uTool = new UtilityTool();
@@ -86,9 +89,26 @@ public abstract class Entity {
             if(invincible){
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.4f));
             }
+            if(dying){
+                dyingAnimation(g2);
+            }
             g2.drawImage(image, screenX, screenY,gp.tileSize, gp.tileSize, null);
             // Reset Alpha
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
+        }
+    }
+    public void dyingAnimation(Graphics2D g2){
+        dyingCounter++;
+        if(dyingCounter % 5 == 0){
+            if(dyingCounter % 2 == 0){
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0f));
+            }
+            else{
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
+            }
+        } else if (dyingCounter > 40) {
+            dying = false;
+            alive = false;
         }
     }
     public void setAction(){
