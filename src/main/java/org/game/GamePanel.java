@@ -196,6 +196,7 @@ public class GamePanel extends JPanel implements Runnable{
             g2.drawString("Time: " + ui.dFormat.format(ui.playTime) + "s", 10, 250);
             g2.drawString("Invincible: " + player.invincible, 10, 280);
             g2.drawString("InvincibleCounter: " + player.invincibleCounter, 10, 310);
+            g2.drawString("EntityCount: " + entityList.size(), 10, 340);
         }
         g2.dispose(); // saves memory because it's deleted
     }
