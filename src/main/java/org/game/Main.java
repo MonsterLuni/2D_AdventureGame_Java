@@ -1,7 +1,7 @@
 package org.game;
 
-import javax.swing.*;
-
+import javax.swing.JFrame;
+import javax.swing.ImageIcon;
 public class Main {
     public static void main(String[] args) {
         JFrame window = new JFrame();

@@ -15,39 +15,38 @@ public abstract class Entity {
     public Entity(GamePanel gp){
         this.gp = gp;
     }
-    public int worldX, worldY;
-    public int speed;
-    public int screenX;
-    public int screenY;
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public BufferedImage attackUp1, attackUp2, attackDown1,attackDown2,attackLeft1,attackLeft2,attackRight1,attackRight2;
+
+    // INTEGERS
+    public int worldX, worldY, screenX, screenY, speed, maxLife, life, type, solidAreaDefaultX, solidAreaDefaultY;
+
+    // COUNTER
     public int actionLockCounter = 0;
     public int actionLockCounterNumber = 120;
-    public String direction = "down";
-    public boolean attacking = false;
     public int spriteCounter = 0;
     public int spriteNumber = 1;
-    public boolean invincible = false;
     public int invincibleCounter = 0;
-    String[] dialogues = new String[20];
-    int dialogueIndex = 0;
-    // From former SuperObject
-    public BufferedImage image, image2, image3;
-    public String name;
-    public boolean collision = false;
+    public int dyingCounter = 0;
 
-    // CHARACTER STATUS
-    public int maxLife;
-    public int life;
-
-    public Rectangle solidArea = new Rectangle(0,0,48,48);
-    public Rectangle attackArea = new Rectangle(0,0,0,0);
-    public int solidAreaDefaultX, solidAreaDefaultY;
+    // BOOLEANS
+    public boolean attacking = false;
     public boolean collisionOn = false;
     public boolean alive = true;
     public boolean dying = false;
-    int dyingCounter = 0;
-    public int type;
+    public boolean invincible = false;
+    public boolean collision = false;
+
+    // RECTANGLES / BUFFERS
+    public Rectangle solidArea = new Rectangle(0,0,48,48);
+    public Rectangle attackArea = new Rectangle(0,0,0,0);
+    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, image, image2, image3;
+    public BufferedImage attackUp1, attackUp2, attackDown1,attackDown2,attackLeft1,attackLeft2,attackRight1,attackRight2;
+
+    // DIALOGUE
+    public String direction = "down";
+    public String name;
+    int dialogueIndex = 0;
+    String[] dialogues = new String[20];
+
     public BufferedImage setup(String packagePath, String imageName, int width, int height){
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
@@ -119,13 +118,13 @@ public abstract class Entity {
             if(i <= 25){
                 direction = "up";
             }
-            if(i > 25 && i <= 50){
+            else if(i <= 50){
                 direction = "down";
             }
-            if(i > 50 && i <= 75){
+            else if(i <= 75){
                 direction = "left";
             }
-            if(i > 75){
+            else{
                 direction = "right";
             }
             actionLockCounter = 0;

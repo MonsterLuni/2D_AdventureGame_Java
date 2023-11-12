@@ -8,7 +8,6 @@ import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 public class GamePanel extends JPanel implements Runnable{
     // SCREEN SETTINGS

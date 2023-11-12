@@ -136,12 +136,10 @@ public class UI {
         g2.setColor(new Color(0,0,0));
         g2.fillRect(0,0, gp.screenWidth, gp.screenHeight);
 
-        String text = "SETTINGS";
-        dText.MakeTextCenter(text,0, gp.screenHeight/2 - 100, this.g2, arial_40, Color.white);
+        dText.MakeTextCenter("SETTINGS",0, gp.screenHeight/2 - 100, this.g2, arial_40, Color.white);
     }
     public void drawPauseScreen(){
-        String text = "PAUSED";
-        dText.MakeTextCenter(text,0, gp.screenHeight/2 - 100, this.g2, arial_40, Color.white);
+        dText.MakeTextCenter("PAUSED",0, gp.screenHeight/2 - 100, this.g2, arial_40, Color.white);
     }
     public void drawDialogueScreen(){
         // WINDOW
