@@ -10,6 +10,7 @@ public class OBJ_Key extends Entity {
         this.worldY = y;
 
         name = "Key";
+        description = "[" + name + "]\n opens a door...";
         down1 = setup("objects", "Key");
     }
 }

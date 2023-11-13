@@ -2,11 +2,14 @@ package org.game.entity;
 
 import org.game.GamePanel;
 import org.game.KeyHandler;
+import org.game.object.OBJ_Boots;
+import org.game.object.OBJ_Key;
 import org.game.object.OBJ_Shield_Wood;
 import org.game.object.OBJ_Sword_Normal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Player extends Entity{
     KeyHandler keyH;
@@ -14,6 +17,8 @@ public class Player extends Entity{
     public int animationDuration = 15;
     public int hasKey = 0;
     public int spriteCounterAttack = 0;
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int inventorySize = 20;
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
         this.keyH = keyH;
@@ -30,6 +35,7 @@ public class Player extends Entity{
         setDefaultValues();
         getPlayerImage();
         getPlayerAttackImage();
+        setItems();
     }
     public void setDefaultValues(){
         //TODO: make that this is in the middle
@@ -50,6 +56,18 @@ public class Player extends Entity{
         currentShield = new OBJ_Shield_Wood(gp);
         attack = getAttack();
         defense = getDefense();
+    }
+    public void setItems(){
+        inventory.add(currentWeapon);
+        inventory.add(currentShield);
+        inventory.add(new OBJ_Key(0,0,gp));
+        inventory.add(new OBJ_Boots(0,0,gp));
+        inventory.add(new OBJ_Key(0,0,gp));
+        inventory.add(new OBJ_Boots(0,0,gp));
+        inventory.add(new OBJ_Key(0,0,gp));
+        inventory.add(new OBJ_Boots(0,0,gp));
+        inventory.add(new OBJ_Key(0,0,gp));
+        inventory.add(new OBJ_Boots(0,0,gp));
     }
     public int getAttack(){
         return attack = strength * currentWeapon.attackValue;

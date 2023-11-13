@@ -30,6 +30,7 @@ public abstract class Entity {
     public Entity currentShield;
     public int attackValue;
     public int defenseValue;
+    public String description = "";
 
     // COUNTER
     public int actionLockCounter = 0;
@@ -199,7 +200,6 @@ public abstract class Entity {
             case "down" -> direction = "up";
             case "left" -> direction = "right";
             case "right" -> direction = "left";
-
         }
     }
 }
