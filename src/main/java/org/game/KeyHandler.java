@@ -116,7 +116,8 @@ public class KeyHandler implements KeyListener {
         // CHARACTER STATE
         else if(gp.gameState == gp.characterState){
             switch (e.getKeyCode()){
-                case KeyEvent.VK_I -> gp.gameState = gp.playState;
+                case KeyEvent.VK_I, KeyEvent.VK_ESCAPE -> gp.gameState = gp.playState;
+                case KeyEvent.VK_ENTER -> gp.player.selectItem();
                 case KeyEvent.VK_W -> {
                     if(gp.ui.slotRow != 0){
                         gp.ui.slotRow--;

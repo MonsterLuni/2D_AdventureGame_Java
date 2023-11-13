@@ -18,6 +18,12 @@ public abstract class Entity {
 
     // INTEGERS
     public int worldX, worldY, screenX, screenY, speed, maxLife, life, type, solidAreaDefaultX, solidAreaDefaultY;
+    public final int type_player = 0;
+    public final int type_npc = 1;
+    public final int type_monster = 2;
+    public final int type_sword = 3;
+    public final int type_shield = 4;
+    public final int type_consumable = 5;
     public int level;
     public int strength;
     public int dexterity;
@@ -157,7 +163,7 @@ public abstract class Entity {
         gp.cChecker.checkEntity(this, gp.monster);
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
 
-        if(this.type == 2 && contactPlayer){
+        if(this.type == type_monster && contactPlayer){
             if(!gp.player.invincible){
                 gp.playSE(6);
 

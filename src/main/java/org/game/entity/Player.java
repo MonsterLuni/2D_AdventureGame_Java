@@ -2,8 +2,6 @@ package org.game.entity;
 
 import org.game.GamePanel;
 import org.game.KeyHandler;
-import org.game.object.OBJ_Boots;
-import org.game.object.OBJ_Key;
 import org.game.object.OBJ_Shield_Wood;
 import org.game.object.OBJ_Sword_Normal;
 
@@ -60,16 +58,9 @@ public class Player extends Entity{
     public void setItems(){
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Key(0,0,gp));
-        inventory.add(new OBJ_Boots(0,0,gp));
-        inventory.add(new OBJ_Key(0,0,gp));
-        inventory.add(new OBJ_Boots(0,0,gp));
-        inventory.add(new OBJ_Key(0,0,gp));
-        inventory.add(new OBJ_Boots(0,0,gp));
-        inventory.add(new OBJ_Key(0,0,gp));
-        inventory.add(new OBJ_Boots(0,0,gp));
     }
     public int getAttack(){
+        attackArea = currentWeapon.attackArea;
         return attack = strength * currentWeapon.attackValue;
     }
     public int getDefense(){
@@ -167,10 +158,44 @@ public class Player extends Entity{
             }
         }
     }
+    public void selectItem(){
+        int itemIndex = gp.ui.getItemIndexOnSlot();
+        if(itemIndex < inventory.size()){
+            Entity selectedItem = inventory.get(itemIndex);
+            if(selectedItem.type == type_sword){
+                currentWeapon = selectedItem;
+                attack = getAttack();
+            }
+            else if (selectedItem.type == type_shield){
+                currentShield = selectedItem;
+                defense = getDefense();
+            }
+            else if(selectedItem.type == type_consumable){
+                //todo: LATER
+            }
+        }
+    }
     public void pickUpObject(int i){
         if(i != 999){
+            if(inventory.size() != inventorySize){
+                inventory.add(gp.obj[i]);
+                gp.ui.addMessage("Got " + gp.obj[i].name);
+            }
+            else {
+                gp.ui.showMessage("You feel too heavy...");
+            }
             String objectName = gp.obj[i].name;
             switch(objectName){
+                case "Diamond Axe" -> {
+                    gp.playSE(1);
+                    gp.obj[i] = null;
+                    gp.ui.showMessage("You found an interesting Axe!");
+                }
+                case "Diamond Shield" -> {
+                    gp.playSE(1);
+                    gp.obj[i] = null;
+                    gp.ui.showMessage("You found an diamond Shield!");
+                }
                 case "Key" -> {
                     gp.playSE(1);
                     hasKey++;

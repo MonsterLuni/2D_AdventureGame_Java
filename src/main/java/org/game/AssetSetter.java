@@ -2,10 +2,7 @@ package org.game;
 
 import org.game.entity.NPC_Mage;
 import org.game.monster.MON_GreenSlime;
-import org.game.object.OBJ_Boots;
-import org.game.object.OBJ_Chest;
-import org.game.object.OBJ_Door;
-import org.game.object.OBJ_Key;
+import org.game.object.*;
 
 public class AssetSetter {
     GamePanel gp;
@@ -21,6 +18,8 @@ public class AssetSetter {
         gp.obj[5] = new OBJ_Door(12 * gp.tileSize, 22 * gp.tileSize, this.gp);
         gp.obj[6] = new OBJ_Chest(10 * gp.tileSize, 7 * gp.tileSize, this.gp);
         gp.obj[7] = new OBJ_Boots(37 * gp.tileSize, 42 * gp.tileSize, this.gp);
+        gp.obj[8] = new OBJ_Axe(37 * gp.tileSize, 43 * gp.tileSize, this.gp);
+        gp.obj[9] = new OBJ_Shield_diamond(23 * gp.tileSize, 42 * gp.tileSize, this.gp);
     }
     public void setNPC(){
         gp.npc[0] = new NPC_Mage(gp);

@@ -202,7 +202,7 @@ public class GamePanel extends JPanel implements Runnable{
             g2.drawString("Music (F2): " + musicPlaying, 10, defaultNum + step*2);
             g2.drawString("Time: " + ui.dFormat.format(ui.playTime) + "s", 10, defaultNum + step*3);
             g2.drawString("Invincible: " + player.invincible, 10, defaultNum + step*4);
-            g2.drawString("InvincibleCounter: " + player.invincibleCounter, 10, defaultNum + step*4);
+            g2.drawString("InvincibleCounter: " + player.invincibleCounter, 10, defaultNum + step*5);
             g2.drawString("EntityCount: " + entityList.size(), 10, defaultNum + step*6);
         }
         g2.dispose(); // saves memory because it's deleted
