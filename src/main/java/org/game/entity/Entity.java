@@ -138,8 +138,6 @@ public abstract class Entity {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
             }
         } else if (dyingCounter > 40) {
-            invincibleCounter = 0;
-            invincible = false;
             dying = false;
             alive = false;
             hpBarOn = false;
@@ -161,7 +159,13 @@ public abstract class Entity {
         if(this.type == 2 && contactPlayer){
             if(!gp.player.invincible){
                 gp.playSE(6);
-                gp.player.life--;
+
+                int damage = attack - gp.player.defense;
+                if(damage < 0){
+                    damage = 0;
+                }
+
+                gp.player.life -= damage;
                 gp.player.invincible = true;
             }
         }

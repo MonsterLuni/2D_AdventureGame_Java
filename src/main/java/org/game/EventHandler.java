@@ -75,6 +75,7 @@ public class EventHandler {
                 gp.gameState = gameState;
                 gp.ui.currentDialogue = "You feel refreshed!";
                 gp.player.life++;
+                gp.aSetter.setMonster();
             }
         }
     }

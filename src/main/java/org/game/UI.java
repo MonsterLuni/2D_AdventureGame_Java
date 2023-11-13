@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class UI {
     GamePanel gp;
@@ -21,6 +22,8 @@ public class UI {
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
+    ArrayList<String> messageBottom = new ArrayList<>();
+    ArrayList<Integer> messageCounterBottom = new ArrayList<>();
     double playTime;
     public String currentDialogue = "";
     DecimalFormat dFormat = new DecimalFormat("#0.00");
@@ -53,6 +56,10 @@ public class UI {
         message = text;
         messageOn = true;
     }
+    public void addMessage(String text){
+        messageBottom.add(text);
+        messageCounterBottom.add(0);
+    }
     public void draw(Graphics2D g2){
         this.g2 = g2;
         g2.setFont(Kay);
@@ -62,6 +69,7 @@ public class UI {
             case 1 -> {
                 drawPlayerLife();
                 drawPlayScreen();
+                drawMessage();
             }
             case 2 -> {
                 drawPlayerLife();
@@ -73,6 +81,26 @@ public class UI {
             }
             case 4 -> drawSettingsScreen();
             case 5 -> drawCharacterScreen();
+        }
+    }
+
+    private void drawMessage() {
+        int messageX = gp.tileSize;
+        int messageY = gp.tileSize*10;
+        for(int i = 0; i < messageBottom.size(); i++){
+            if(messageBottom.get(i) != null){
+                dText.MakeText(messageBottom.get(i),messageX + 2,messageY + 2,g2,g2.getFont().deriveFont(Font.BOLD,16F),Color.black);
+                dText.MakeText(messageBottom.get(i),messageX,messageY,g2,g2.getFont().deriveFont(Font.BOLD,16F),Color.white);
+                int counter = messageCounterBottom.get(i) + 1; //messageCounter++
+                messageCounterBottom.set(i,counter); // set the counter to the array
+                messageY += 20;
+
+                if(messageCounterBottom.get(i) > 120){
+                    messageBottom.remove(i);
+                    messageCounterBottom.remove(i);
+
+                }
+            }
         }
     }
 

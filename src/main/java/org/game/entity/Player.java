@@ -55,7 +55,7 @@ public class Player extends Entity{
         return attack = strength * currentWeapon.attackValue;
     }
     public int getDefense(){
-        return defense = dexterity * currentShield.defense;
+        return defense = dexterity * currentShield.defenseValue;
     }
     public void getPlayerImage(){
         System.out.println("Player loading started");
@@ -261,7 +261,13 @@ public class Player extends Entity{
         if(i != 999){
             if(!invincible){
                 gp.playSE(6);
-                life--;
+
+                int damage = gp.monster[i].attack - defense;
+                if(damage < 0){
+                    damage = 0;
+                }
+
+                life -= damage;
                 invincible = true;
             }
         }
@@ -311,13 +317,41 @@ public class Player extends Entity{
         if(i != 999){
             if(!gp.monster[i].invincible){
                 gp.playSE(5);
-                gp.monster[i].life--;
+
+                int damage = attack - gp.monster[i].defense;
+                if(damage < 0){
+                    damage = 0;
+                }
+                gp.monster[i].life -= damage;
+                gp.ui.addMessage(damage + " damage!");
+
                 gp.monster[i].invincible = true;
                 gp.monster[i].damageReaction();
                 if(gp.monster[i].life <= 0){
                     gp.monster[i].dying = true;
+                    gp.ui.addMessage("Killed the " + gp.monster[i].name + "!");
+                    gp.ui.addMessage("Exp +" + gp.monster[i].exp);
+                    exp += gp.monster[i].exp;
+                    checkLevelUp();
                 }
             }
+        }
+    }
+
+    private void checkLevelUp() {
+        if(exp >= nextLevelExp){
+            gp.playSE(2);
+            level++;
+            nextLevelExp *= 2;
+            exp = 0;
+            maxLife += 2;
+            life = maxLife;
+            strength++;
+            dexterity++;
+            // To recalculate
+            attack = getAttack();
+            defense = getDefense();
+            gp.ui.showMessage("You are level " + level + " now");
         }
     }
 }
