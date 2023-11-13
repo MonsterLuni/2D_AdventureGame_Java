@@ -2,6 +2,8 @@ package org.game.entity;
 
 import org.game.GamePanel;
 import org.game.KeyHandler;
+import org.game.object.OBJ_Shield_Wood;
+import org.game.object.OBJ_Sword_Normal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -36,8 +38,24 @@ public class Player extends Entity{
         speed = 4;
         direction = "down";
         // PLAYER SATUS
+        level = 1;
         maxLife = 10;
         life = maxLife;
+        strength = 1; // more strength == more damage
+        dexterity = 1; // more dexterity == less damage receive
+        exp = 1;
+        nextLevelExp = 5;
+        coin = 0;
+        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentShield = new OBJ_Shield_Wood(gp);
+        attack = getAttack();
+        defense = getDefense();
+    }
+    public int getAttack(){
+        return attack = strength * currentWeapon.attackValue;
+    }
+    public int getDefense(){
+        return defense = dexterity * currentShield.defense;
     }
     public void getPlayerImage(){
         System.out.println("Player loading started");
@@ -242,6 +260,7 @@ public class Player extends Entity{
     public void contactMonster(int i){
         if(i != 999){
             if(!invincible){
+                gp.playSE(6);
                 life--;
                 invincible = true;
             }
@@ -291,8 +310,10 @@ public class Player extends Entity{
     public void damageMonster(int i){
         if(i != 999){
             if(!gp.monster[i].invincible){
+                gp.playSE(5);
                 gp.monster[i].life--;
                 gp.monster[i].invincible = true;
+                gp.monster[i].damageReaction();
                 if(gp.monster[i].life <= 0){
                     gp.monster[i].dying = true;
                 }

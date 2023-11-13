@@ -72,8 +72,101 @@ public class UI {
                 drawDialogueScreen();
             }
             case 4 -> drawSettingsScreen();
+            case 5 -> drawCharacterScreen();
         }
     }
+
+    private void drawCharacterScreen() {
+        // CREATE A FRAME
+        final int frameX = gp.tileSize * 9;
+        int frameY = gp.tileSize;
+        final int frameWidth = gp.tileSize*6;
+        final int frameHeight = gp.tileSize*10;
+        drawSubWindow(frameX,frameY,frameWidth,frameHeight);
+        // TEXT
+        dText.MakeText("Level",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+        frameY += 40;
+        dText.MakeText("Life",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+        frameY += 40;
+        dText.MakeText("Strength",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+        frameY += 40;
+        dText.MakeText("Dexterity",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+        frameY += 40;
+        dText.MakeText("Attack",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+        frameY += 40;
+        dText.MakeText("Defense",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+        frameY += 40;
+        dText.MakeText("Exp",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+        frameY += 40;
+        dText.MakeText("Next Level",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+        frameY += 40;
+        dText.MakeText("Coin",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+        frameY += 40;
+        dText.MakeText("Weapon",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+        frameY += 40;
+        dText.MakeText("Shield",frameX + 20,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+
+        // VALUES
+        int tailX = (frameX + frameWidth) - 30;
+        int textX = 0;
+        String value;
+
+        frameY = gp.tileSize;
+        value = String.valueOf(gp.player.level);
+        textX = getXforAlignToRightText(value,tailX);
+        dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+
+        frameY += 40;
+        value = String.valueOf(gp.player.life + " / " + gp.player.maxLife);
+        textX = getXforAlignToRightText(value,tailX);
+        dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+
+        frameY += 40;
+        value = String.valueOf(gp.player.strength);
+        textX = getXforAlignToRightText(value,tailX);
+        dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+
+        frameY += 40;
+        value = String.valueOf(gp.player.dexterity);
+        textX = getXforAlignToRightText(value,tailX);
+        dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+
+        frameY += 40;
+        value = String.valueOf(gp.player.attack);
+        textX = getXforAlignToRightText(value,tailX);
+        dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+
+        frameY += 40;
+        value = String.valueOf(gp.player.defense);
+        textX = getXforAlignToRightText(value,tailX);
+        dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+
+        frameY += 40;
+        value = String.valueOf(gp.player.exp);
+        textX = getXforAlignToRightText(value,tailX);
+        dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+
+        frameY += 40;
+        value = String.valueOf(gp.player.nextLevelExp);
+        textX = getXforAlignToRightText(value,tailX);
+        dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+
+        frameY += 40;
+        value = String.valueOf(gp.player.coin);
+        textX = getXforAlignToRightText(value,tailX);
+        dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
+
+        frameY += 48;
+        g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize + 10, frameY, null);
+
+        frameY += 48;
+        g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize + 10, frameY, null);
+    }
+    public int getXforAlignToRightText(String text, int tailX){
+        int length = (int)g2.getFontMetrics().getStringBounds(text,g2).getWidth();
+        return tailX - length;
+    }
+
     public void drawPlayerLife(){
         int i = 0;
         int x = gp.tileSize / 2;

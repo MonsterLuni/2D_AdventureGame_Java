@@ -11,13 +11,25 @@ import java.io.IOException;
 import java.util.Random;
 
 public abstract class Entity {
-    GamePanel gp;
+    public GamePanel gp;
     public Entity(GamePanel gp){
         this.gp = gp;
     }
 
     // INTEGERS
     public int worldX, worldY, screenX, screenY, speed, maxLife, life, type, solidAreaDefaultX, solidAreaDefaultY;
+    public int level;
+    public int strength;
+    public int dexterity;
+    public int attack;
+    public int defense;
+    public int exp;
+    public int nextLevelExp;
+    public int coin;
+    public Entity currentWeapon;
+    public Entity currentShield;
+    public int attackValue;
+    public int defenseValue;
 
     // COUNTER
     public int actionLockCounter = 0;
@@ -26,6 +38,7 @@ public abstract class Entity {
     public int spriteNumber = 1;
     public int invincibleCounter = 0;
     public int dyingCounter = 0;
+    public int hpBarCounter = 0;
 
     // BOOLEANS
     public boolean attacking = false;
@@ -34,6 +47,7 @@ public abstract class Entity {
     public boolean dying = false;
     public boolean invincible = false;
     public boolean collision = false;
+    boolean hpBarOn = false;
 
     // RECTANGLES / BUFFERS
     public Rectangle solidArea = new Rectangle(0,0,48,48);
@@ -85,8 +99,26 @@ public abstract class Entity {
                 case "left" -> image = left1;
                 case "right" -> image = right1;
             }
+            // Monster HP bar
+            if(type == 2 && hpBarOn){
+                // find current length of bar
+                double oneScale = (double)gp.tileSize/maxLife;
+                double hpBarValue = oneScale*life;
+
+                g2.setColor(new Color(35,35,35));
+                g2.fillRect(screenX-2,screenY-17,gp.tileSize + 3,14);
+                g2.setColor(new Color(255,0,30));
+                g2.fillRect(screenX,screenY - 15 ,(int)hpBarValue,10);
+                hpBarCounter++;
+                if(hpBarCounter > 500){
+                    hpBarOn = false;
+                    hpBarCounter = 0;
+                }
+            }
             if(invincible){
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.4f));
+                hpBarOn = true;
+                hpBarCounter = 0;
             }
             if(dying){
                 dyingAnimation(g2);
@@ -106,30 +138,16 @@ public abstract class Entity {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
             }
         } else if (dyingCounter > 40) {
+            invincibleCounter = 0;
+            invincible = false;
             dying = false;
             alive = false;
+            hpBarOn = false;
+            hpBarCounter = 0;
         }
     }
-    public void setAction(){
-        actionLockCounter++;
-        if(actionLockCounter == actionLockCounterNumber){
-            Random random = new Random();
-            int i = random.nextInt(100)+1;
-            if(i <= 25){
-                direction = "up";
-            }
-            else if(i <= 50){
-                direction = "down";
-            }
-            else if(i <= 75){
-                direction = "left";
-            }
-            else{
-                direction = "right";
-            }
-            actionLockCounter = 0;
-        }
-    }
+    public void damageReaction(){}
+    public void setAction(){}
     public void update(){
         setAction();
 
@@ -142,6 +160,7 @@ public abstract class Entity {
 
         if(this.type == 2 && contactPlayer){
             if(!gp.player.invincible){
+                gp.playSE(6);
                 gp.player.life--;
                 gp.player.invincible = true;
             }

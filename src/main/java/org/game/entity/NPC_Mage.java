@@ -2,6 +2,8 @@ package org.game.entity;
 
 import org.game.GamePanel;
 
+import java.util.Random;
+
 public class NPC_Mage extends Entity{
     public NPC_Mage(GamePanel gp){
         super(gp);
@@ -24,6 +26,26 @@ public class NPC_Mage extends Entity{
         dialogues[2] = "What are you doing here?";
         dialogues[3] = "Crazy? I was Crazy once, \n they locked me in a Room. \n a rubber room.";
         dialogues[4] = "Don't go in the forest!";
+    }
+    public void setAction(){
+        actionLockCounter++;
+        if(actionLockCounter == actionLockCounterNumber){
+            Random random = new Random();
+            int i = random.nextInt(100)+1;
+            if(i <= 25){
+                direction = "up";
+            }
+            else if(i <= 50){
+                direction = "down";
+            }
+            else if(i <= 75){
+                direction = "left";
+            }
+            else{
+                direction = "right";
+            }
+            actionLockCounter = 0;
+        }
     }
     @Override
     public void speak(){

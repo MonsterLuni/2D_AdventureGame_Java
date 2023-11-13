@@ -17,6 +17,9 @@ public class Sound {
             soundURL[2] = new File("src/main/res/sound/PowerUp.wav").toURI().toURL();
             soundURL[3] = new File("src/main/res/sound/Unlock.wav").toURI().toURL();
             soundURL[4] = new File("src/main/res/sound/Ending.wav").toURI().toURL();
+            soundURL[5] = new File("src/main/res/sound/hitmonster.wav").toURI().toURL();
+            soundURL[6] = new File("src/main/res/sound/receivedamage.wav").toURI().toURL();
+            soundURL[7] = new File("src/main/res/sound/swingweapon.wav").toURI().toURL();
         }catch (Exception e){
             System.out.println("Music Fetching error");
         }

@@ -28,6 +28,10 @@ public class GamePanel extends JPanel implements Runnable{
     int currentfps = FPS;
     boolean musicPlaying = true;
     /*
+    * In Laptop BiCT
+    * 300'000 thousand fps
+    */
+    /* Laptop Zuhause
     15 million fps
     11 million fps
     8 million fps
@@ -61,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int pauseState = 2;
     public final int dialogueState = 3;
     public final int settingsScreen = 4;
+    public final int characterState = 5;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -111,7 +116,7 @@ public class GamePanel extends JPanel implements Runnable{
             }
         }
     }
-    public void update(){
+    public void update() {
         if(gameState == playState){
             player.update();
             // NPC
@@ -190,13 +195,15 @@ public class GamePanel extends JPanel implements Runnable{
             double passed = drawEnd - drawStart;
             g2.setFont(arial_20);
             g2.setColor(Color.white);
-            g2.drawString("Draw Time: " + ui.dFormat.format(passed / 1000000) + "ms", 10, 160);
-            g2.drawString("FPS: " + currentfps, 10, 190);
-            g2.drawString("Music (F2): " + musicPlaying, 10, 220);
-            g2.drawString("Time: " + ui.dFormat.format(ui.playTime) + "s", 10, 250);
-            g2.drawString("Invincible: " + player.invincible, 10, 280);
-            g2.drawString("InvincibleCounter: " + player.invincibleCounter, 10, 310);
-            g2.drawString("EntityCount: " + entityList.size(), 10, 340);
+            int defaultNum = 160;
+            int step = 30;
+            g2.drawString("Draw Time: " + ui.dFormat.format(passed / 1000000) + "ms", 10, defaultNum);
+            g2.drawString("FPS: " + currentfps, 10, defaultNum + step);
+            g2.drawString("Music (F2): " + musicPlaying, 10, defaultNum + step*2);
+            g2.drawString("Time: " + ui.dFormat.format(ui.playTime) + "s", 10, defaultNum + step*3);
+            g2.drawString("Invincible: " + player.invincible, 10, defaultNum + step*4);
+            g2.drawString("InvincibleCounter: " + player.invincibleCounter, 10, defaultNum + step*4);
+            g2.drawString("EntityCount: " + entityList.size(), 10, defaultNum + step*6);
         }
         g2.dispose(); // saves memory because it's deleted
     }

@@ -28,7 +28,13 @@ public class KeyHandler implements KeyListener {
                 case KeyEvent.VK_D -> rightPressed = true;
                 case KeyEvent.VK_E -> ePressed = true;
                 case KeyEvent.VK_T -> gp.player.life--;
-                case KeyEvent.VK_ENTER -> gp.player.attacking = true;
+                case KeyEvent.VK_I -> gp.gameState = gp.characterState;
+                case KeyEvent.VK_ENTER -> {
+                    if(!gp.player.attacking){
+                        gp.playSE(7);
+                    }
+                    gp.player.attacking = true;
+                }
                 case KeyEvent.VK_ESCAPE -> {
                     gp.gameState = gp.pauseState;
                     gp.FPS = 5;
@@ -105,6 +111,12 @@ public class KeyHandler implements KeyListener {
                 case KeyEvent.VK_ESCAPE -> {
                     gp.gameState = gp.titleState;
                 }
+            }
+        }
+        // CHARACTER STATE
+        else if(gp.gameState == gp.characterState){
+            switch (e.getKeyCode()){
+                case KeyEvent.VK_I -> gp.gameState = gp.playState;
             }
         }
     }
