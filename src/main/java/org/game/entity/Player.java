@@ -2,12 +2,14 @@ package org.game.entity;
 
 import org.game.GamePanel;
 import org.game.KeyHandler;
+import org.game.object.OBJ_Fireball;
 import org.game.object.OBJ_Shield_Wood;
 import org.game.object.OBJ_Sword_Normal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Player extends Entity{
     KeyHandler keyH;
@@ -52,6 +54,7 @@ public class Player extends Entity{
         coin = 0;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
+        projectile = new OBJ_Fireball(gp);
         attack = getAttack();
         defense = getDefense();
     }
@@ -79,20 +82,42 @@ public class Player extends Entity{
         System.out.println("Player loading ended");
     }
     public void getPlayerAttackImage(){
-        System.out.println("Player Attack loading started");
-        attackUp1 = setup("player", "boy_attack_up_1",gp.tileSize,gp.tileSize*2);
-        attackUp2 = setup("player", "boy_attack_up_2",gp.tileSize,gp.tileSize*2);
-        attackDown1 = setup("player", "boy_attack_down_1",gp.tileSize,gp.tileSize*2);
-        attackDown2 = setup("player", "boy_attack_down_2",gp.tileSize,gp.tileSize*2);
-        attackLeft1 = setup("player", "boy_attack_left_1",gp.tileSize*2,gp.tileSize);
-        attackLeft2 = setup("player", "boy_attack_left_2",gp.tileSize*2,gp.tileSize);
-        attackRight1 = setup("player", "boy_attack_right_1",gp.tileSize*2,gp.tileSize);
-        attackRight2 = setup("player", "boy_attack_right_2",gp.tileSize*2,gp.tileSize);
-        System.out.println("Player Attack loading started");
+        if(currentWeapon.type == type_sword){
+            System.out.println("Player Attack loading started");
+            attackUp1 = setup("player", "boy_attack_up_1",gp.tileSize,gp.tileSize*2);
+            attackUp2 = setup("player", "boy_attack_up_2",gp.tileSize,gp.tileSize*2);
+            attackDown1 = setup("player", "boy_attack_down_1",gp.tileSize,gp.tileSize*2);
+            attackDown2 = setup("player", "boy_attack_down_2",gp.tileSize,gp.tileSize*2);
+            attackLeft1 = setup("player", "boy_attack_left_1",gp.tileSize*2,gp.tileSize);
+            attackLeft2 = setup("player", "boy_attack_left_2",gp.tileSize*2,gp.tileSize);
+            attackRight1 = setup("player", "boy_attack_right_1",gp.tileSize*2,gp.tileSize);
+            attackRight2 = setup("player", "boy_attack_right_2",gp.tileSize*2,gp.tileSize);
+            System.out.println("Player Attack loading started");
+        }
+        else{
+            //TODO: add Axe sprites
+            System.out.println("Player Attack loading started");
+            attackUp1 = setup("player", "boy_attack_up_1",gp.tileSize,gp.tileSize*2);
+            attackUp2 = setup("player", "boy_attack_up_2",gp.tileSize,gp.tileSize*2);
+            attackDown1 = setup("player", "boy_attack_down_1",gp.tileSize,gp.tileSize*2);
+            attackDown2 = setup("player", "boy_attack_down_2",gp.tileSize,gp.tileSize*2);
+            attackLeft1 = setup("player", "boy_attack_left_1",gp.tileSize*2,gp.tileSize);
+            attackLeft2 = setup("player", "boy_attack_left_2",gp.tileSize*2,gp.tileSize);
+            attackRight1 = setup("player", "boy_attack_right_1",gp.tileSize*2,gp.tileSize);
+            attackRight2 = setup("player", "boy_attack_right_2",gp.tileSize*2,gp.tileSize);
+            System.out.println("Player Attack loading started");
+        }
     }
     public void update(){
         if(attacking){
             attacking();
+        }
+        if(keyH.shotKeyPressed && !projectile.alive && shotAvailableCounter == 30){
+                projectile.set(worldX,worldY,direction,true,this);
+                // ADD IT TO THE LIST
+                gp.projectileList.add(projectile);
+                shotAvailableCounter = 0;
+                gp.playSE(8);
         }
         if(invincible){
             invincibleCounter++;
@@ -100,6 +125,9 @@ public class Player extends Entity{
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+        if(shotAvailableCounter < 30){
+            shotAvailableCounter++;
         }
         boolean pressing = false;
         if(keyH.upPressed){
@@ -165,19 +193,21 @@ public class Player extends Entity{
             if(selectedItem.type == type_sword){
                 currentWeapon = selectedItem;
                 attack = getAttack();
+                getPlayerAttackImage();
             }
             else if (selectedItem.type == type_shield){
                 currentShield = selectedItem;
                 defense = getDefense();
             }
             else if(selectedItem.type == type_consumable){
-                //todo: LATER
+                selectedItem.use(this);
+                inventory.remove(itemIndex);
             }
         }
     }
     public void pickUpObject(int i){
         if(i != 999){
-            if(inventory.size() != inventorySize){
+            if(inventory.size() != inventorySize && !Objects.equals(gp.obj[i].name, "Door") && Objects.equals(gp.obj[i].name, "Chest")){
                 inventory.add(gp.obj[i]);
                 gp.ui.addMessage("Got " + gp.obj[i].name);
             }
@@ -186,20 +216,21 @@ public class Player extends Entity{
             }
             String objectName = gp.obj[i].name;
             switch(objectName){
+                case "Red Potion" -> {
+                    gp.playSE(1);
+                    gp.ui.showMessage("You guess this thing can heal anything!");
+                }
                 case "Diamond Axe" -> {
                     gp.playSE(1);
-                    gp.obj[i] = null;
                     gp.ui.showMessage("You found an interesting Axe!");
                 }
                 case "Diamond Shield" -> {
                     gp.playSE(1);
-                    gp.obj[i] = null;
                     gp.ui.showMessage("You found an diamond Shield!");
                 }
                 case "Key" -> {
                     gp.playSE(1);
                     hasKey++;
-                    gp.obj[i] = null;
                     if(Math.random() > 0.8f){
                         gp.ui.showMessage("You found a perfectly fine key");
                     }
@@ -211,7 +242,6 @@ public class Player extends Entity{
                     if(hasKey > 0){
                         gp.playSE(3);
                         hasKey--;
-                        gp.obj[i] = null;
                         gp.ui.showMessage("You managed to open the door");
                     }
                     else{
@@ -222,7 +252,6 @@ public class Player extends Entity{
                     gp.playSE(2);
                     speed += 2;
                     animationDuration = 10;
-                    gp.obj[i] = null;
                     gp.ui.showMessage("You feel a lot faster");
                 }
                 case "Chest" -> {
@@ -231,6 +260,7 @@ public class Player extends Entity{
                     gp.playSE(4);
                 }
             }
+            gp.obj[i] = null;
         }
     }
     public void interactNPC(int i){
@@ -302,7 +332,7 @@ public class Player extends Entity{
     }
     public void contactMonster(int i){
         if(i != 999){
-            if(!invincible){
+            if(!invincible && !gp.monster[i].dying){
                 gp.playSE(6);
 
                 int damage = gp.monster[i].attack - defense;
@@ -340,7 +370,7 @@ public class Player extends Entity{
                 solidArea.height = attackArea.height;
 
                 int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-                damageMonster(monsterIndex);
+                damageMonster(monsterIndex, attack);
 
                 worldX = currentWorldX;
                 worldY = currentWorldY;
@@ -356,7 +386,7 @@ public class Player extends Entity{
             attacking = false;
         }
     }
-    public void damageMonster(int i){
+    public void damageMonster(int i, int attack){
         if(i != 999){
             if(!gp.monster[i].invincible){
                 gp.playSE(5);

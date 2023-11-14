@@ -20,6 +20,7 @@ public class Sound {
             soundURL[5] = new File("src/main/res/sound/hitmonster.wav").toURI().toURL();
             soundURL[6] = new File("src/main/res/sound/receivedamage.wav").toURI().toURL();
             soundURL[7] = new File("src/main/res/sound/swingweapon.wav").toURI().toURL();
+            soundURL[8] = new File("src/main/res/sound/burning.wav").toURI().toURL();
         }catch (Exception e){
             System.out.println("Music Fetching error");
         }

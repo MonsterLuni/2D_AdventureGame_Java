@@ -24,6 +24,11 @@ public abstract class Entity {
     public final int type_sword = 3;
     public final int type_shield = 4;
     public final int type_consumable = 5;
+    public int maxMana;
+    public int mana;
+    public Projectile projectile;
+    public int shotAvailableCounter = 0;
+    public int useCost;
     public int level;
     public int strength;
     public int dexterity;
@@ -137,7 +142,7 @@ public abstract class Entity {
     }
     public void dyingAnimation(Graphics2D g2){
         dyingCounter++;
-        if(dyingCounter % 5 == 0){
+        if(dyingCounter % 15 == 0){
             if(dyingCounter % 2 == 0){
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0f));
             }
@@ -145,7 +150,6 @@ public abstract class Entity {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
             }
         } else if (dyingCounter > 40) {
-            dying = false;
             alive = false;
             hpBarOn = false;
             hpBarCounter = 0;
@@ -195,6 +199,7 @@ public abstract class Entity {
             }
         }
     }
+    public void use(Entity entity){}
     public void speak(){
         gp.ui.currentDialogue = dialogues[dialogueIndex];
         dialogueIndex++;

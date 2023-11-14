@@ -12,7 +12,7 @@ public class OBJ_Sword_Normal extends Entity {
         down1 = setup("objects","sword");
         attackValue = 1;
         attackArea.width = 36;
-        attackArea.height = 36;
+        attackArea.height = 48;
     }
 
 }

@@ -2,11 +2,13 @@ package org.game;
 
 import org.game.entity.Entity;
 import org.game.entity.Player;
+import org.game.entity.Projectile;
 import org.game.tile.TileManager;
 
 import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 public class GamePanel extends JPanel implements Runnable{
@@ -52,10 +54,11 @@ public class GamePanel extends JPanel implements Runnable{
     Thread gameThread;
     // ENTITY AND OBJECT
     public Player player = new Player(this,keyH);
-    public Entity[] obj = new Entity[10];
+    public Entity[] obj = new Entity[20];
     public Entity[] npc = new Entity[10];
     public Entity[] monster = new Entity[10];
     ArrayList<Entity> entityList = new ArrayList<>();
+    public ArrayList<Entity> projectileList = new ArrayList<>();
     public double drawInterval = (double) 1000000000 /FPS;
 
     // GAME STATE
@@ -137,6 +140,17 @@ public class GamePanel extends JPanel implements Runnable{
                     }
                 }
             }
+            for (int i = 0; i < projectileList.size(); i++) {
+                //TODO: What the actual fuck is going on here
+                if (projectileList.get(i) != null) {
+                    if(projectileList.get(i).alive){
+                        projectileList.get(i).update();
+                    }
+                    if(!projectileList.get(i).alive){
+                        projectileList.remove(i);
+                    }
+                }
+            }
         } else if (gameState == pauseState) {
             // nothing
             System.out.println("game_paused");
@@ -174,6 +188,11 @@ public class GamePanel extends JPanel implements Runnable{
             for (Entity object : obj) {
                 if (object != null) {
                     entityList.add(object);
+                }
+            }
+            for (Entity value : projectileList) {
+                if (value != null) {
+                    entityList.add(value);
                 }
             }
             // SORT

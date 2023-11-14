@@ -20,6 +20,7 @@ public class AssetSetter {
         gp.obj[7] = new OBJ_Boots(37 * gp.tileSize, 42 * gp.tileSize, this.gp);
         gp.obj[8] = new OBJ_Axe(37 * gp.tileSize, 43 * gp.tileSize, this.gp);
         gp.obj[9] = new OBJ_Shield_diamond(23 * gp.tileSize, 42 * gp.tileSize, this.gp);
+        gp.obj[10] = new OBJ_Potion_Red(23 * gp.tileSize, 28 * gp.tileSize, this.gp);
     }
     public void setNPC(){
         gp.npc[0] = new NPC_Mage(gp);

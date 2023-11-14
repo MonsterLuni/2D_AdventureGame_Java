@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed, shotKeyPressed;
     GamePanel gp;
     UI ui;
     public KeyHandler(GamePanel gp, UI ui){
@@ -29,6 +29,7 @@ public class KeyHandler implements KeyListener {
                 case KeyEvent.VK_E -> ePressed = true;
                 case KeyEvent.VK_T -> gp.player.life--;
                 case KeyEvent.VK_I -> gp.gameState = gp.characterState;
+                case KeyEvent.VK_SPACE -> shotKeyPressed = true;
                 case KeyEvent.VK_ENTER -> {
                     if(!gp.player.attacking){
                         gp.playSE(7);
@@ -149,6 +150,7 @@ public class KeyHandler implements KeyListener {
             case KeyEvent.VK_A -> leftPressed = false;
             case KeyEvent.VK_S -> downPressed = false;
             case KeyEvent.VK_D -> rightPressed = false;
+            case KeyEvent.VK_SPACE -> shotKeyPressed = false;
         }
     }
 }
