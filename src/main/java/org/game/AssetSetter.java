@@ -2,6 +2,7 @@ package org.game;
 
 import org.game.entity.NPC_Mage;
 import org.game.monster.MON_GreenSlime;
+import org.game.monster.MON_RedSlime;
 import org.game.object.*;
 
 public class AssetSetter {
@@ -47,5 +48,13 @@ public class AssetSetter {
         gp.monster[3] = new MON_GreenSlime(gp);
         gp.monster[3].worldX = gp.tileSize*23;
         gp.monster[3].worldY = gp.tileSize*13;
+
+        gp.monster[4] = new MON_RedSlime(gp);
+        gp.monster[4].worldX = gp.tileSize*23;
+        gp.monster[4].worldY = gp.tileSize*8;
+
+        gp.monster[5] = new MON_RedSlime(gp);
+        gp.monster[5].worldX = gp.tileSize*23;
+        gp.monster[5].worldY = gp.tileSize*7;
     }
 }

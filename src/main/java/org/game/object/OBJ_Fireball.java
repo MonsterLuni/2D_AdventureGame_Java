@@ -8,10 +8,10 @@ public class OBJ_Fireball extends Projectile {
         super(gp);
 
         name = "Fireball";
-        speed = 5;
+        speed = 8;
         maxLife = 80;
         life = maxLife;
-        attack = 2;
+        attack = 5;
         useCost = 2;
         alive = false;
         getImage();

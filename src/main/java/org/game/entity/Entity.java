@@ -45,6 +45,7 @@ public abstract class Entity {
 
     // COUNTER
     public int actionLockCounter = 0;
+    public int animationDuration = 60;
     public int actionLockCounterNumber = 120;
     public int spriteCounter = 0;
     public int spriteNumber = 1;
@@ -59,7 +60,7 @@ public abstract class Entity {
     public boolean dying = false;
     public boolean invincible = false;
     public boolean collision = false;
-    boolean hpBarOn = false;
+    public boolean hpBarOn = false;
 
     // RECTANGLES / BUFFERS
     public Rectangle solidArea = new Rectangle(0,0,48,48);
@@ -105,12 +106,12 @@ public abstract class Entity {
                 worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
                 worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
             BufferedImage image = null;
-            switch(direction){
-                case "up" -> image = up1;
-                case "down" -> image = down1;
-                case "left" -> image = left1;
-                case "right" -> image = right1;
-            }
+                switch(direction){
+                    case "up" -> image = up1;
+                    case "down" -> image = down1;
+                    case "left" -> image = left1;
+                    case "right" -> image = right1;
+                }
             // Monster HP bar
             if(type == 2 && hpBarOn){
                 // find current length of bar
@@ -168,17 +169,7 @@ public abstract class Entity {
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
 
         if(this.type == type_monster && contactPlayer){
-            if(!gp.player.invincible){
-                gp.playSE(6);
-
-                int damage = attack - gp.player.defense;
-                if(damage < 0){
-                    damage = 0;
-                }
-
-                gp.player.life -= damage;
-                gp.player.invincible = true;
-            }
+            damagePlayer(attack);
         }
         if(invincible){
             invincibleCounter++;
@@ -187,9 +178,16 @@ public abstract class Entity {
                 invincibleCounter = 0;
             }
         }
-
-        spriteNumber = 1;
-
+        spriteCounter++;
+        if(spriteCounter > animationDuration){
+            if(spriteNumber == 1){
+                spriteNumber = 2;
+            }
+            else{
+                spriteNumber = 1;
+            }
+            spriteCounter = 0;
+        }
         if(!collisionOn){
             switch(direction){
                 case "up" -> worldY -= speed;
@@ -197,6 +195,22 @@ public abstract class Entity {
                 case "left" -> worldX -= speed;
                 case "right" -> worldX += speed;
             }
+        }
+        if(shotAvailableCounter < 30){
+            shotAvailableCounter++;
+        }
+    }
+    public void damagePlayer(int attack){
+        if(!gp.player.invincible){
+            gp.playSE(6);
+
+            int damage = attack - gp.player.defense;
+            if(damage < 0){
+                damage = 0;
+            }
+
+            gp.player.life -= damage;
+            gp.player.invincible = true;
         }
     }
     public void use(Entity entity){}

@@ -13,8 +13,6 @@ import java.util.Objects;
 
 public class Player extends Entity{
     KeyHandler keyH;
-
-    public int animationDuration = 15;
     public int hasKey = 0;
     public int spriteCounterAttack = 0;
     public ArrayList<Entity> inventory = new ArrayList<>();
@@ -46,6 +44,8 @@ public class Player extends Entity{
         // PLAYER SATUS
         level = 1;
         maxLife = 10;
+        maxMana = 45;
+        mana = maxMana;
         life = maxLife;
         strength = 1; // more strength == more damage
         dexterity = 1; // more dexterity == less damage receive
@@ -57,6 +57,7 @@ public class Player extends Entity{
         projectile = new OBJ_Fireball(gp);
         attack = getAttack();
         defense = getDefense();
+        animationDuration = 15;
     }
     public void setItems(){
         inventory.add(currentWeapon);
@@ -207,7 +208,7 @@ public class Player extends Entity{
     }
     public void pickUpObject(int i){
         if(i != 999){
-            if(inventory.size() != inventorySize && !Objects.equals(gp.obj[i].name, "Door") && Objects.equals(gp.obj[i].name, "Chest")){
+            if(inventory.size() != inventorySize && !Objects.equals(gp.obj[i].name, "Door") && !Objects.equals(gp.obj[i].name, "Chest")){
                 inventory.add(gp.obj[i]);
                 gp.ui.addMessage("Got " + gp.obj[i].name);
             }

@@ -3,6 +3,7 @@ package org.game;
 import org.game.entity.Entity;
 import org.game.object.OBJ_Heart;
 import org.game.object.OBJ_Key;
+import org.game.object.OBJ_ManaCrystal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,7 +19,7 @@ public class UI {
     Font Kay;
     BufferedImage keyImage;
     DisplayText dText;
-    BufferedImage heart_full, heart_half, heart_broken;
+    BufferedImage heart_full, heart_half, heart_broken, crystal_full, crystal_blank;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
@@ -53,6 +54,9 @@ public class UI {
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_broken = heart.image3;
+        Entity crystal = new OBJ_ManaCrystal(gp);
+        crystal_full = crystal.image;
+        crystal_blank = crystal.image2;
     }
     public void showMessage(String text){
         message = text;
@@ -62,6 +66,33 @@ public class UI {
         messageBottom.add(text);
         messageCounterBottom.add(0);
     }
+    public void drawPlayerMana(){
+        int x = gp.tileSize*11;
+        int y = gp.tileSize*2 - 70;
+        int i = 0;
+        // DRAW MAX MANA
+        while (i < gp.player.maxMana/10){
+            g2.drawImage(crystal_blank,x,y,null);
+            i += 1;
+            x += 35;
+        }
+        // DRAW MANA
+        x = gp.tileSize*11;
+        y = gp.tileSize*2 - 70;
+        i = 0;
+        while (i < gp.player.mana/10){
+            g2.drawImage(crystal_full,x,y,null);
+            i++;
+            x += 35;
+        }
+        i *= 10;
+        int amount = 0;
+        while(i < gp.player.mana){
+            amount++;
+            i++;
+        }
+        dText.MakeText("+ " + amount,x + 5,y + 30,g2,g2.getFont().deriveFont(Font.ITALIC,24F),Color.white);
+    }
     public void draw(Graphics2D g2){
         this.g2 = g2;
         g2.setFont(Kay);
@@ -70,15 +101,18 @@ public class UI {
             case 0 -> drawTitleScreen();
             case 1 -> {
                 drawPlayerLife();
+                drawPlayerMana();
                 drawPlayScreen();
                 drawMessage();
             }
             case 2 -> {
                 drawPlayerLife();
+                drawPlayerMana();
                 drawPauseScreen();
             }
             case 3 -> {
                 drawPlayerLife();
+                drawPlayerMana();
                 drawDialogueScreen();
             }
             case 4 -> drawSettingsScreen();
@@ -88,7 +122,6 @@ public class UI {
             }
         }
     }
-
     private void drawInventory() {
 
         // FRAME
@@ -157,7 +190,6 @@ public class UI {
     public int getItemIndexOnSlot(){
         return slotCol + (slotRow*5);
     }
-
     private void drawMessage() {
         int messageX = gp.tileSize;
         int messageY = gp.tileSize*10;
@@ -177,7 +209,6 @@ public class UI {
             }
         }
     }
-
     private void drawCharacterScreen() {
         // CREATE A FRAME
         final int frameX = gp.tileSize * 9;
@@ -268,7 +299,6 @@ public class UI {
         int length = (int)g2.getFontMetrics().getStringBounds(text,g2).getWidth();
         return tailX - length;
     }
-
     public void drawPlayerLife(){
         int i = 0;
         int x = gp.tileSize / 2;
@@ -369,7 +399,7 @@ public class UI {
             g2.fillRect(0,0, gp.screenWidth, gp.screenHeight);
             dText.MakeTextCenter("You found the treasure!",0,gp.screenHeight/2 - 100,this.g2, arial_40, Color.white);
             dText.MakeTextCenter("Congratulations!",0,gp.screenHeight/2 - 50,this.g2, arial_60B, Color.red);
-            dText.MakeTextCenter("You found the treasure!",0,gp.screenHeight/2,this.g2, arial_40, Color.white);
+            dText.MakeTextCenter("Time: " + dFormat.format(playTime) + "s",0,gp.screenHeight/2,this.g2, arial_40, Color.white);
             gp.gameThread = null;
         }
         else{

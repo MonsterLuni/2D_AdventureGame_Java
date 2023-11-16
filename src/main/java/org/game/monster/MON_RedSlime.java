@@ -2,23 +2,25 @@ package org.game.monster;
 
 import org.game.GamePanel;
 import org.game.entity.Entity;
+import org.game.object.OBJ_Coconut;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class MON_GreenSlime extends Entity {
-    public MON_GreenSlime(GamePanel gp) {
+public class MON_RedSlime extends Entity {
+    public MON_RedSlime(GamePanel gp) {
         super(gp);
         type = type_monster;
-        name = "Green Slime";
-        speed = 1;
-        maxLife = 8;
+        name = "Red Slime";
+        speed = 2;
+        maxLife = 16;
         life = maxLife;
         actionLockCounterNumber = 60;
-        attack = 5;
-        defense = 0;
-        exp = 2;
+        attack = 8;
+        defense = 2;
+        exp = 20;
+        projectile = new OBJ_Coconut(gp);
 
         solidArea.x = 3;
         solidArea.y = 18;
@@ -29,14 +31,14 @@ public class MON_GreenSlime extends Entity {
         getImage();
     }
     public void getImage(){
-        up1 = setup("monster","slime_down_1");
-        up2 = setup("monster","slime_down_2");
-        down1 = setup("monster","slime_down_1");
-        down2 = setup("monster","slime_down_2");
-        left1 = setup("monster","slime_down_1");
-        left2 = setup("monster","slime_down_2");
-        right1 = setup("monster","slime_down_1");
-        right2 = setup("monster","slime_down_2");
+        up1 = setup("monster","red_slime_down_1");
+        up2 = setup("monster","red_slime_down_2");
+        down1 = setup("monster","red_slime_down_1");
+        down2 = setup("monster","red_slime_down_2");
+        left1 = setup("monster","red_slime_down_1");
+        left2 = setup("monster","red_slime_down_2");
+        right1 = setup("monster","red_slime_down_1");
+        right2 = setup("monster","red_slime_down_2");
     }
     public void setAction(){
         actionLockCounter++;
@@ -56,6 +58,12 @@ public class MON_GreenSlime extends Entity {
                 direction = "right";
             }
             actionLockCounter = 0;
+        }
+        int i = new Random().nextInt(100)+1;
+        if(i > 99 && !projectile.alive && shotAvailableCounter == 30){
+            projectile.set(worldX,worldY,direction,true,this);
+            gp.projectileList.add(projectile);
+            shotAvailableCounter = 0;
         }
     }
     public void damageReaction(){
