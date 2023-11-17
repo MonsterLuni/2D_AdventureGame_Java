@@ -67,7 +67,7 @@ public class UI {
         messageCounterBottom.add(0);
     }
     public void drawPlayerMana(){
-        int x = gp.tileSize*11;
+        int x = gp.tileSize*13;
         int y = gp.tileSize*2 - 70;
         int i = 0;
         // DRAW MAX MANA
@@ -78,7 +78,7 @@ public class UI {
         }
         int maxX = x;
         // DRAW MANA
-        x = gp.tileSize*11;
+        x = gp.tileSize*13;
         y = gp.tileSize*2 - 70;
         i = 0;
         while (i < gp.player.mana/10){
@@ -209,7 +209,7 @@ public class UI {
     }
     private void drawCharacterScreen() {
         // CREATE A FRAME
-        final int frameX = gp.tileSize * 9;
+        final int frameX = gp.tileSize * 13;
         int frameY = gp.tileSize;
         final int frameWidth = gp.tileSize*6;
         final int frameHeight = gp.tileSize*10;
@@ -343,10 +343,10 @@ public class UI {
 
         if(blinkOn < 30){
             switch (commandNum){
-                case 0 -> dText.MakeText(">",(gp.tileSize*9)/2,gp.tileSize*7,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
-                case 1 -> dText.MakeText(">",(gp.tileSize*9)/2 - 10,gp.tileSize*8,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
-                case 2 -> dText.MakeText(">",(gp.tileSize*9)/2 + 10,gp.tileSize*9,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
-                case 3 -> dText.MakeText(">",(gp.tileSize*12)/2,gp.tileSize*10,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
+                case 0 -> dText.MakeText(">",(gp.tileSize*13)/2,gp.tileSize*7,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
+                case 1 -> dText.MakeText(">",(gp.tileSize*13)/2 - 10,gp.tileSize*8,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
+                case 2 -> dText.MakeText(">",(gp.tileSize*13)/2 + 10,gp.tileSize*9,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
+                case 3 -> dText.MakeText(">",(gp.tileSize*16)/2,gp.tileSize*10,g2,g2.getFont().deriveFont(Font.BOLD,48F),Color.white);
             }
         }
         if(blinkOn > 60) {

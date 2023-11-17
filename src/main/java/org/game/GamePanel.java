@@ -8,6 +8,7 @@ import org.game.tile_interactive.InteractiveTile;
 import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 public class GamePanel extends JPanel implements Runnable{
@@ -15,10 +16,15 @@ public class GamePanel extends JPanel implements Runnable{
     final int originalTitleSize = 16; //16x16 tile
     final int scale = 3; //multiplies the pixel size of originalTitleSize
     public final int tileSize = originalTitleSize * scale; // 48x48 tile
-    public final int maxScreenCol = 16; // x
+    public final int maxScreenCol = 20; // x
     public final int maxScreenRow = 12; // y
-    public final int screenWidth = tileSize * maxScreenCol; // 768 pixels
+    public final int screenWidth = tileSize * maxScreenCol; // 960 pixels
     public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
+    // FOR FULL SCREEN
+    int screenWidth2 = screenWidth;
+    int screenHeight2 = screenHeight;
+    BufferedImage tempScreen;
+    Graphics2D g2;
     //WORLD SETTINGS
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
@@ -77,7 +83,6 @@ public class GamePanel extends JPanel implements Runnable{
     public final int dialogueState = 3;
     public final int settingsScreen = 4;
     public final int characterState = 5;
-
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -86,7 +91,6 @@ public class GamePanel extends JPanel implements Runnable{
         this.setFocusable(true);
         arial_20 = new Font("arial", Font.ITALIC, 20);
     }
-
     public void setupGame(){
         System.out.println("Object loading started");
         aSetter.setObject();
@@ -101,6 +105,21 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setInteractiveTile();
         System.out.println("iTiles loading ended");
         gameState = titleState;
+
+        tempScreen = new BufferedImage(screenWidth, screenHeight,BufferedImage.TYPE_INT_ARGB);
+        g2 = (Graphics2D) tempScreen.getGraphics();
+
+        setFullScreen();
+    }
+    public void setFullScreen(){
+        // GET LOCAL SCREEN DEVICE
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(Main.window);
+
+        // GET FULL SCREEN WIDTH AND HEIGHT
+        screenWidth2 = Main.window.getWidth();
+        screenHeight2 = Main.window.getHeight();
     }
     public void startGameThread(){
         gameThread = new Thread(this);
@@ -119,7 +138,8 @@ public class GamePanel extends JPanel implements Runnable{
             lastTime = currentTime;
             if(delta >= 1){
                 update(); // 1 UPDATE: update information such as character positions
-                repaint(); // 2 DRAW: draw the screen with the updated information. Calls paintComponent (java function)
+                drawToTempScreen(g2);
+                drawToScreen();
                 delta--;
                 drawCount++;
             }
@@ -182,9 +202,7 @@ public class GamePanel extends JPanel implements Runnable{
             System.out.println("game_paused");
         }
     }
-    public void paintComponent(Graphics g){
-        super.paintComponent(g); // super means parent class aka JPanel
-        Graphics2D g2 = (Graphics2D) g; // has more functions
+    public void drawToTempScreen(Graphics g){
         // DEBUG
         double drawStart = 0;
         if(keyH.debug){
@@ -263,7 +281,11 @@ public class GamePanel extends JPanel implements Runnable{
             g2.drawString("Y Row : " + (player.worldY / tileSize + 1), 10, defaultNum + step*7);
             g2.drawString("X Col : " + player.worldX / tileSize, 10, defaultNum + step*8);
         }
-        g2.dispose(); // saves memory because it's deleted
+    }
+    public void drawToScreen(){
+        Graphics g = getGraphics();
+        g.drawImage(tempScreen,0,0, screenWidth2,screenHeight2,null);
+        g.dispose();
     }
     public void playMusic(int i){
         System.out.println("MUSIC IS PLAYING");
