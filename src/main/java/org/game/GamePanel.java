@@ -2,13 +2,12 @@ package org.game;
 
 import org.game.entity.Entity;
 import org.game.entity.Player;
-import org.game.entity.Projectile;
 import org.game.tile.TileManager;
+import org.game.tile_interactive.InteractiveTile;
 
 import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 public class GamePanel extends JPanel implements Runnable{
@@ -20,26 +19,33 @@ public class GamePanel extends JPanel implements Runnable{
     public final int maxScreenRow = 12; // y
     public final int screenWidth = tileSize * maxScreenCol; // 768 pixels
     public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
-    //WORLDSETTINGS
+    //WORLD SETTINGS
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
     // FPS
     int FPS = 60;
     int drawCount = 0;
     long timer = 0;
-    int currentfps = FPS;
+    int currentFps = FPS;
     boolean musicPlaying = true;
     /*
     * In Laptop BiCT
+    * -
+    * -
+    * -
     * 300'000 thousand fps
+    * -
+    * -
+    * -
     */
-    /* Laptop Zuhause
+    /* Laptop At Home
     15 million fps
     11 million fps
     8 million fps
     4.5 million fps
     3.5 million fps
     1 million fps
+    1.6 million fps
      */
     //SYSTEM
     public TileManager tileM = new TileManager(this);
@@ -57,8 +63,10 @@ public class GamePanel extends JPanel implements Runnable{
     public Entity[] obj = new Entity[20];
     public Entity[] npc = new Entity[10];
     public Entity[] monster = new Entity[10];
+    public InteractiveTile[] iTile = new InteractiveTile[20];
     ArrayList<Entity> entityList = new ArrayList<>();
     public ArrayList<Entity> projectileList = new ArrayList<>();
+    public ArrayList<Entity> particleList = new ArrayList<>();
     public double drawInterval = (double) 1000000000 /FPS;
 
     // GAME STATE
@@ -89,6 +97,9 @@ public class GamePanel extends JPanel implements Runnable{
         System.out.println("Monster loading started");
         aSetter.setMonster();
         System.out.println("Monster loading started");
+        System.out.println("iTiles loading started");
+        aSetter.setInteractiveTile();
+        System.out.println("iTiles loading ended");
         gameState = titleState;
     }
     public void startGameThread(){
@@ -113,7 +124,7 @@ public class GamePanel extends JPanel implements Runnable{
                 drawCount++;
             }
             if(timer >= 1000000000){
-                currentfps = drawCount;
+                currentFps = drawCount;
                 drawCount = 0;
                 timer = 0;
             }
@@ -136,12 +147,12 @@ public class GamePanel extends JPanel implements Runnable{
                         monster[i].update();
                     }
                     else {
+                        monster[i].checkDrop();
                         monster[i] = null;
                     }
                 }
             }
             for (int i = 0; i < projectileList.size(); i++) {
-                //TODO: What the actual fuck is going on here
                 if (projectileList.get(i) != null) {
                     if(projectileList.get(i).alive){
                         projectileList.get(i).update();
@@ -149,6 +160,21 @@ public class GamePanel extends JPanel implements Runnable{
                     if(!projectileList.get(i).alive){
                         projectileList.remove(i);
                     }
+                }
+            }
+            for (int i = 0; i < particleList.size(); i++) {
+                if (particleList.get(i) != null) {
+                    if(particleList.get(i).alive){
+                        particleList.get(i).update();
+                    }
+                    if(!particleList.get(i).alive){
+                        particleList.remove(i);
+                    }
+                }
+            }
+            for (InteractiveTile interactiveTile : iTile) {
+                if (interactiveTile != null) {
+                    interactiveTile.update();
                 }
             }
         } else if (gameState == pauseState) {
@@ -172,6 +198,12 @@ public class GamePanel extends JPanel implements Runnable{
         else{
             // TILE
             tileM.draw(g2);
+            // Interactive Tile
+            for (InteractiveTile interactiveTile : iTile) {
+                if (interactiveTile != null) {
+                    interactiveTile.draw(g2);
+                }
+            }
 
             // ADD ENTITIES TO LIST
             entityList.add(player);
@@ -191,6 +223,11 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
             for (Entity value : projectileList) {
+                if (value != null) {
+                    entityList.add(value);
+                }
+            }
+            for (Entity value : particleList) {
                 if (value != null) {
                     entityList.add(value);
                 }
@@ -217,12 +254,14 @@ public class GamePanel extends JPanel implements Runnable{
             int defaultNum = 160;
             int step = 30;
             g2.drawString("Draw Time: " + ui.dFormat.format(passed / 1000000) + "ms", 10, defaultNum);
-            g2.drawString("FPS: " + currentfps, 10, defaultNum + step);
+            g2.drawString("FPS: " + currentFps, 10, defaultNum + step);
             g2.drawString("Music (F2): " + musicPlaying, 10, defaultNum + step*2);
             g2.drawString("Time: " + ui.dFormat.format(ui.playTime) + "s", 10, defaultNum + step*3);
             g2.drawString("Invincible: " + player.invincible, 10, defaultNum + step*4);
             g2.drawString("InvincibleCounter: " + player.invincibleCounter, 10, defaultNum + step*5);
             g2.drawString("EntityCount: " + entityList.size(), 10, defaultNum + step*6);
+            g2.drawString("Y Row : " + (player.worldY / tileSize + 1), 10, defaultNum + step*7);
+            g2.drawString("X Col : " + player.worldX / tileSize, 10, defaultNum + step*8);
         }
         g2.dispose(); // saves memory because it's deleted
     }

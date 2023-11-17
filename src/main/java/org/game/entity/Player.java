@@ -2,9 +2,10 @@ package org.game.entity;
 
 import org.game.GamePanel;
 import org.game.KeyHandler;
-import org.game.object.OBJ_Fireball;
-import org.game.object.OBJ_Shield_Wood;
-import org.game.object.OBJ_Sword_Normal;
+import org.game.object.projectile.OBJ_Fireball;
+import org.game.object.upgrade.OBJ_Axe;
+import org.game.object.upgrade.OBJ_Shield_Wood;
+import org.game.object.upgrade.OBJ_Sword_Normal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -41,10 +42,10 @@ public class Player extends Entity{
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
-        // PLAYER SATUS
+        // PLAYER STATUS
         level = 1;
         maxLife = 10;
-        maxMana = 45;
+        maxMana = 20;
         mana = maxMana;
         life = maxLife;
         strength = 1; // more strength == more damage
@@ -62,6 +63,7 @@ public class Player extends Entity{
     public void setItems(){
         inventory.add(currentWeapon);
         inventory.add(currentShield);
+        inventory.add(new OBJ_Axe(0,0,gp));
     }
     public int getAttack(){
         attackArea = currentWeapon.attackArea;
@@ -97,7 +99,7 @@ public class Player extends Entity{
         }
         else{
             //TODO: add Axe sprites
-            System.out.println("Player Attack loading started");
+            System.out.println("Player Axe Attack loading started");
             attackUp1 = setup("player", "boy_attack_up_1",gp.tileSize,gp.tileSize*2);
             attackUp2 = setup("player", "boy_attack_up_2",gp.tileSize,gp.tileSize*2);
             attackDown1 = setup("player", "boy_attack_down_1",gp.tileSize,gp.tileSize*2);
@@ -106,18 +108,21 @@ public class Player extends Entity{
             attackLeft2 = setup("player", "boy_attack_left_2",gp.tileSize*2,gp.tileSize);
             attackRight1 = setup("player", "boy_attack_right_1",gp.tileSize*2,gp.tileSize);
             attackRight2 = setup("player", "boy_attack_right_2",gp.tileSize*2,gp.tileSize);
-            System.out.println("Player Attack loading started");
+            System.out.println("Player Axe Attack loading started");
         }
     }
     public void update(){
         if(attacking){
             attacking();
         }
-        if(keyH.shotKeyPressed && !projectile.alive && shotAvailableCounter == 30){
+        if(keyH.shotKeyPressed && !projectile.alive && shotAvailableCounter == 30 && projectile.haveResource(this)){
                 projectile.set(worldX,worldY,direction,true,this);
+                // subtracts mana
+                projectile.subtractResource(this);
                 // ADD IT TO THE LIST
                 gp.projectileList.add(projectile);
                 shotAvailableCounter = 0;
+
                 gp.playSE(8);
         }
         if(invincible){
@@ -150,6 +155,8 @@ public class Player extends Entity{
         //CHECK TILE COLLISION
         collisionOn = false;
         gp.cChecker.checkTile(this);
+        // CHECK INTERACTIVE TILE COLLISION
+        gp.cChecker.checkEntity(this, gp.iTile);
         // CHECK NPC COLLISION
         int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
         interactNPC(npcIndex);
@@ -191,7 +198,7 @@ public class Player extends Entity{
         int itemIndex = gp.ui.getItemIndexOnSlot();
         if(itemIndex < inventory.size()){
             Entity selectedItem = inventory.get(itemIndex);
-            if(selectedItem.type == type_sword){
+            if(selectedItem.type == type_sword || selectedItem.type == type_axe){
                 currentWeapon = selectedItem;
                 attack = getAttack();
                 getPlayerAttackImage();
@@ -208,59 +215,73 @@ public class Player extends Entity{
     }
     public void pickUpObject(int i){
         if(i != 999){
-            if(inventory.size() != inventorySize && !Objects.equals(gp.obj[i].name, "Door") && !Objects.equals(gp.obj[i].name, "Chest")){
-                inventory.add(gp.obj[i]);
-                gp.ui.addMessage("Got " + gp.obj[i].name);
+            // PICKUP ONLY ITEMS
+            if(gp.obj[i].type == type_pickUpOnly){
+                gp.obj[i].use(this);
             }
             else {
-                gp.ui.showMessage("You feel too heavy...");
+                // INVENTORY ITEMS
+                if(inventory.size() != inventorySize && !Objects.equals(gp.obj[i].name, "Door") && !Objects.equals(gp.obj[i].name, "Chest")){
+                    inventory.add(gp.obj[i]);
+                    gp.ui.addMessage("Got " + gp.obj[i].name);
+                }
+                else {
+                    gp.ui.showMessage("You feel too heavy...");
+                }
+                String objectName = gp.obj[i].name;
+                switch(objectName){
+                    case "Red Potion" -> {
+                        gp.playSE(1);
+                        gp.ui.showMessage("You guess this thing can heal anything!");
+                    }
+                    case "Diamond Axe" -> {
+                        gp.playSE(1);
+                        gp.ui.showMessage("You found an interesting Axe!");
+                    }
+                    case "Diamond Shield" -> {
+                        gp.playSE(1);
+                        gp.ui.showMessage("You found an diamond Shield!");
+                    }
+                    case "Key" -> {
+                        gp.playSE(1);
+                        hasKey++;
+                        if(Math.random() > 0.8f){
+                            gp.ui.showMessage("You found a perfectly fine key");
+                        }
+                        else{
+                            gp.ui.showMessage("You found an rusty old key");
+                        }
+                    }
+                    case "Door" -> {
+                        if(hasKey > 0){
+                            gp.playSE(3);
+                            hasKey--;
+                            gp.ui.showMessage("You managed to open the door");
+                        }
+                        else{
+                            gp.ui.showMessage("This door seems to be locked");
+                        }
+                    }
+                    case "Boots" -> {
+                        gp.playSE(2);
+                        speed += 2;
+                        animationDuration = 10;
+                        gp.ui.showMessage("You feel a lot faster");
+                    }
+                    case "Chest" -> {
+                        gp.ui.gameFinished = true;
+                        gp.stopMusic();
+                        gp.playSE(4);
+                    }
+                }
             }
-            String objectName = gp.obj[i].name;
-            switch(objectName){
-                case "Red Potion" -> {
-                    gp.playSE(1);
-                    gp.ui.showMessage("You guess this thing can heal anything!");
-                }
-                case "Diamond Axe" -> {
-                    gp.playSE(1);
-                    gp.ui.showMessage("You found an interesting Axe!");
-                }
-                case "Diamond Shield" -> {
-                    gp.playSE(1);
-                    gp.ui.showMessage("You found an diamond Shield!");
-                }
-                case "Key" -> {
-                    gp.playSE(1);
-                    hasKey++;
-                    if(Math.random() > 0.8f){
-                        gp.ui.showMessage("You found a perfectly fine key");
-                    }
-                    else{
-                        gp.ui.showMessage("You found an rusty old key");
-                    }
-                }
-                case "Door" -> {
-                    if(hasKey > 0){
-                        gp.playSE(3);
-                        hasKey--;
-                        gp.ui.showMessage("You managed to open the door");
-                    }
-                    else{
-                        gp.ui.showMessage("This door seems to be locked");
-                    }
-                }
-                case "Boots" -> {
-                    gp.playSE(2);
-                    speed += 2;
-                    animationDuration = 10;
-                    gp.ui.showMessage("You feel a lot faster");
-                }
-                case "Chest" -> {
-                    gp.ui.gameFinished = true;
-                    gp.stopMusic();
-                    gp.playSE(4);
-                }
+            if(life > maxLife){
+                life = maxLife;
             }
+            if(mana > maxMana){
+                mana = maxMana;
+            }
+            // DELETE OBJECT
             gp.obj[i] = null;
         }
     }
@@ -373,6 +394,9 @@ public class Player extends Entity{
                 int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
                 damageMonster(monsterIndex, attack);
 
+                int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+                damageInteractiveTile(iTileIndex);
+
                 worldX = currentWorldX;
                 worldY = currentWorldY;
                 solidArea.width = solidAreaWidth;
@@ -385,6 +409,19 @@ public class Player extends Entity{
         else{
             spriteCounterAttack = 0;
             attacking = false;
+        }
+    }
+    private void damageInteractiveTile(int i) {
+        if(i != 999 && gp.iTile[i].destructible && gp.iTile[i].isCorrectItem(this) && !gp.iTile[i].invincible){
+            gp.iTile[i].life--;
+            gp.iTile[i].invincible = true;
+
+            generateParticle(gp.iTile[i], gp.iTile[i]);
+
+            if(gp.iTile[i].life == 0){
+                gp.iTile[i].playSE();
+                gp.iTile[i] = gp.iTile[i].getDestroyedForm();
+            }
         }
     }
     public void damageMonster(int i, int attack){
@@ -411,7 +448,6 @@ public class Player extends Entity{
             }
         }
     }
-
     private void checkLevelUp() {
         if(exp >= nextLevelExp){
             gp.playSE(2);

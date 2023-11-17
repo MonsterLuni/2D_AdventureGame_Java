@@ -1,4 +1,4 @@
-package org.game.object;
+package org.game.object.upgrade;
 
 import org.game.GamePanel;
 import org.game.entity.Entity;
@@ -11,8 +11,8 @@ public class OBJ_Sword_Normal extends Entity {
         description = "[" + name + "]\nAn old sword";
         down1 = setup("objects","sword");
         attackValue = 1;
-        attackArea.width = 36;
-        attackArea.height = 48;
+        attackArea.width = 30;
+        attackArea.height = 30;
     }
 
 }

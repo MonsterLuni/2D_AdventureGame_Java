@@ -2,6 +2,9 @@ package org.game.monster;
 
 import org.game.GamePanel;
 import org.game.entity.Entity;
+import org.game.object.pickUpOnly.OBJ_Coin_Bronze;
+import org.game.object.pickUpOnly.OBJ_Heart;
+import org.game.object.pickUpOnly.OBJ_ManaCrystal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -115,6 +118,19 @@ public class MON_GreenSlime extends Entity {
             g2.drawImage(image, screenX, screenY,gp.tileSize, gp.tileSize, null);
             // Reset Alpha
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
+        }
+    }
+    @Override
+    public void checkDrop(){
+        short i = (short) (new Random().nextInt(100)+1);
+        if(i < 50){
+            dropItem(new OBJ_Coin_Bronze(0,0,gp));
+        }
+        else if(i < 75){
+            dropItem(new OBJ_Heart(0,0,gp));
+        }
+        else{
+            dropItem(new OBJ_ManaCrystal(0,0,gp));
         }
     }
 }

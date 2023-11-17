@@ -1,4 +1,4 @@
-package org.game.object;
+package org.game.object.upgrade;
 
 import org.game.GamePanel;
 import org.game.entity.Entity;

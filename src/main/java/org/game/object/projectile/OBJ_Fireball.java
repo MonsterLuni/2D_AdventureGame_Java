@@ -1,7 +1,10 @@
-package org.game.object;
+package org.game.object.projectile;
 
 import org.game.GamePanel;
+import org.game.entity.Entity;
 import org.game.entity.Projectile;
+
+import java.awt.*;
 
 public class OBJ_Fireball extends Projectile {
     public OBJ_Fireball(GamePanel gp) {
@@ -28,5 +31,32 @@ public class OBJ_Fireball extends Projectile {
         right2 = setup("projectile","fireball_right_2");
         System.out.println("Fireball loading ended");
     }
-
+    @Override
+    public boolean haveResource(Entity user){
+        boolean haveResource = false;
+        if(user.mana >= useCost){
+            haveResource = true;
+        }
+        return  haveResource;
+    }
+    @Override
+    public void subtractResource(Entity user){
+        user.mana -= useCost;
+    }
+    @Override
+    public Color getParticleColor(){
+        return new Color(121, 20, 16);
+    }
+    @Override
+    public int getParticleSize(){
+        return 10;
+    }
+    @Override
+    public int getParticleSpeed(){
+        return 1;
+    }
+    @Override
+    public int getParticleMaxLife(){
+        return 20;
+    }
 }

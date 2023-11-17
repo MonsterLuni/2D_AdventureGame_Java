@@ -2,13 +2,13 @@ package org.game.entity;
 
 import org.game.GamePanel;
 import org.game.UtilityTool;
+import org.game.particle.Particle;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Random;
 
 public abstract class Entity {
     public GamePanel gp;
@@ -17,34 +17,24 @@ public abstract class Entity {
     }
 
     // INTEGERS
-    public int worldX, worldY, screenX, screenY, speed, maxLife, life, type, solidAreaDefaultX, solidAreaDefaultY;
-    public final int type_player = 0;
-    public final int type_npc = 1;
+    public int worldX, worldY, screenX, screenY, speed, maxLife, life, type, solidAreaDefaultX, solidAreaDefaultY, maxMana, mana, useCost,level;
+    public int attackValue, defenseValue, coin, nextLevelExp, exp, defense, attack, dexterity, strength, value;
+    // a public final int type_player = 0;
+    // a public final int type_npc = 1;
     public final int type_monster = 2;
     public final int type_sword = 3;
-    public final int type_shield = 4;
-    public final int type_consumable = 5;
-    public int maxMana;
-    public int mana;
+    public final int type_axe = 4;
+    public final int type_shield = 5;
+    public final int type_consumable = 6;
+    public final int type_pickUpOnly = 7;
     public Projectile projectile;
-    public int shotAvailableCounter = 0;
-    public int useCost;
-    public int level;
-    public int strength;
-    public int dexterity;
-    public int attack;
-    public int defense;
-    public int exp;
-    public int nextLevelExp;
-    public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
-    public int attackValue;
-    public int defenseValue;
     public String description = "";
 
     // COUNTER
     public int actionLockCounter = 0;
+    public int shotAvailableCounter = 0;
     public int animationDuration = 60;
     public int actionLockCounterNumber = 120;
     public int spriteCounter = 0;
@@ -136,7 +126,7 @@ public abstract class Entity {
             if(dying){
                 dyingAnimation(g2);
             }
-            g2.drawImage(image, screenX, screenY,gp.tileSize, gp.tileSize, null);
+            g2.drawImage(image, screenX, screenY, null);
             // Reset Alpha
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
         }
@@ -166,6 +156,7 @@ public abstract class Entity {
         gp.cChecker.checkObject(this, false);
         gp.cChecker.checkEntity(this, gp.npc);
         gp.cChecker.checkEntity(this, gp.monster);
+        gp.cChecker.checkEntity(this, gp.iTile);
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
 
         if(this.type == type_monster && contactPlayer){
@@ -226,5 +217,45 @@ public abstract class Entity {
             case "left" -> direction = "right";
             case "right" -> direction = "left";
         }
+    }
+    public void checkDrop(){
+
+    }
+    public void dropItem(Entity droppedItem){
+        for (int i = 0; i < gp.obj.length; i++){
+            if(gp.obj[i] == null){
+                gp.obj[i] = droppedItem;
+                gp.obj[i].worldX = worldX; // the ones from the dead monster
+                gp.obj[i].worldY = worldY; // the ones from the dead monster
+                break;
+            }
+        }
+    }
+    public void generateParticle(Entity generator, Entity target){
+        Color color = generator.getParticleColor();
+        int size = generator.getParticleSize();
+        int speed = generator.getParticleSpeed();
+        int maxLife = generator.getParticleMaxLife();
+
+        Particle p1 = new Particle(gp,target,color,size,speed,maxLife, -2, -1);
+        gp.particleList.add(p1);
+        Particle p2 = new Particle(gp,target,color,size,speed,maxLife, 2, -1);
+        gp.particleList.add(p2);
+        Particle p3 = new Particle(gp,target,color,size,speed,maxLife, -2, 1);
+        gp.particleList.add(p3);
+        Particle p4 = new Particle(gp,target,color,size,speed,maxLife, 2, 1);
+        gp.particleList.add(p4);
+    }
+    public Color getParticleColor(){
+        return null;
+    }
+    public int getParticleSize(){
+        return 0;
+    }
+    public int getParticleSpeed(){
+        return 0;
+    }
+    public int getParticleMaxLife(){
+        return 0;
     }
 }

@@ -27,7 +27,7 @@ public class EventHandler {
     }
     public void checkEvent(){
         // Check if player has moved more than 1 tile
-        int xDistance = Math.abs(gp.player.worldX - pEventX); // Betragsstrich :D
+        int xDistance = Math.abs(gp.player.worldX - pEventX);
         int yDistance = Math.abs(gp.player.worldY - pEventY);
         int distance = Math.max(xDistance, yDistance);
         if(distance > gp.tileSize){

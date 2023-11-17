@@ -1,0 +1,341 @@
+@startuml
+class OBJ_Key {
+}
+abstract class Entity {
++ GamePanel gp
++ int worldX
++ int attackValue
++ int type_monster
++ int type_sword
++ int type_axe
++ int type_shield
++ int type_consumable
++ int type_pickUpOnly
++ Projectile projectile
++ Entity currentWeapon
++ Entity currentShield
++ String description
++ int actionLockCounter
++ int shotAvailableCounter
++ int animationDuration
++ int actionLockCounterNumber
++ int spriteCounter
++ int spriteNumber
++ int invincibleCounter
++ int dyingCounter
++ int hpBarCounter
++ boolean attacking
++ boolean collisionOn
++ boolean alive
++ boolean dying
++ boolean invincible
++ boolean collision
++ boolean hpBarOn
++ Rectangle solidArea
++ Rectangle attackArea
++ BufferedImage up1
++ BufferedImage attackUp1
++ String direction
++ String name
+~ int dialogueIndex
+~ String[] dialogues
++ BufferedImage setup(String,String,int,int)
++ BufferedImage setup(String,String)
++ void draw(Graphics2D)
++ void dyingAnimation(Graphics2D)
++ void damageReaction()
++ void setAction()
++ void update()
++ void damagePlayer(int)
++ void use(Entity)
++ void speak()
++ void checkDrop()
++ void dropItem(Entity)
+}
+class DisplayText {
+~ GamePanel gp
+~ Graphics2D g2
++ void MakeText(String,int,int,Graphics2D,Font,Color)
++ void MakeTextCenter(String,int,int,Graphics2D,Font,Color)
+}
+class OBJ_Boots {
+}
+class OBJ_Door {
+}
+class OBJ_Fireball {
++ void getImage()
++ boolean haveResource(Entity)
++ void subtractResource(Entity)
+}
+class Tile {
++ BufferedImage image
++ boolean collision
+}
+class Sound {
+~ Clip clip
+~ URL[] soundURL
++ void setFile(int)
++ void play()
++ void loop()
++ void stop()
+}
+class UI {
+~ GamePanel gp
+~ Graphics2D g2
+~ Font arial_40
+~ Font Kay
+~ BufferedImage keyImage
+~ DisplayText dText
+~ BufferedImage heart_full
++ boolean messageOn
++ String message
+~ int messageCounter
+~ ArrayList<String> messageBottom
+~ ArrayList<Integer> messageCounterBottom
+~ double playTime
++ String currentDialogue
++ int slotCol
++ int slotRow
+~ DecimalFormat dFormat
++ boolean gameFinished
++ int commandNum
++ int blinkOn
++ void showMessage(String)
++ void addMessage(String)
++ void drawPlayerMana()
++ void draw(Graphics2D)
+- void drawInventory()
++ int getItemIndexOnSlot()
+- void drawMessage()
+- void drawCharacterScreen()
++ int getXForAlignToRightText(String,int)
++ void drawPlayerLife()
++ void drawTitleScreen()
++ void drawSettingsScreen()
++ void drawPauseScreen()
++ void drawDialogueScreen()
++ void drawSubWindow(int,int,int,int)
++ void drawPlayScreen()
+}
+class EventHandler {
+~ GamePanel gp
+~ EventRect[][] eventRect
+~ int pEventX
+~ boolean canTouchEvent
++ void checkEvent()
++ boolean hit(int,int,String)
++ void damagePit(int)
++ void healingPool(int)
+}
+class MON_RedSlime {
++ void getImage()
++ void setAction()
++ void damageReaction()
++ void draw(Graphics2D)
+}
+class OBJ_Shield_Wood {
+}
+class OBJ_Chest {
+}
+class IT_RottenTree {
++ boolean isCorrectItem(Entity)
++ void playSE()
++ InteractiveTile getDestroyedForm()
+}
+class OBJ_Shield_diamond {
+}
+class UtilityTool {
++ BufferedImage scaleImage(BufferedImage,int,int)
+}
+class OBJ_ManaCrystal {
++ void use(Entity)
+}
+class NPC_Mage {
++ void getImage()
++ void setDialogue()
++ void setAction()
++ void speak()
+}
+class OBJ_Axe {
+}
+class InteractiveTile {
++ boolean destructible
++ void update()
++ boolean isCorrectItem(Entity)
++ void playSE()
++ InteractiveTile getDestroyedForm()
+}
+class TileManager {
+~ GamePanel gp
++ Tile[] tile
++ int[][] mapTileNum
++ void getTileImage()
++ void setup(int,String,boolean)
++ void loadMap(String)
++ void draw(Graphics2D)
+}
+class OBJ_Potion_Red {
++ void use(Entity)
+}
+class OBJ_Coconut {
++ void getImage()
+}
+class AssetSetter {
+~ GamePanel gp
++ void setObject()
++ void setNPC()
++ void setMonster()
++ void setInteractiveTile()
+}
+class IT_Trunk {
+}
+class MON_GreenSlime {
++ void getImage()
++ void setAction()
++ void damageReaction()
++ void draw(Graphics2D)
++ void checkDrop()
+}
+class EventRect {
+~ int eventRectDefaultX
+~ boolean eventDone
+}
+class Player {
+~ KeyHandler keyH
++ int hasKey
++ int spriteCounterAttack
++ ArrayList<Entity> inventory
++ int inventorySize
++ void setDefaultValues()
++ void setItems()
++ int getAttack()
++ int getDefense()
++ void getPlayerImage()
++ void getPlayerAttackImage()
++ void update()
++ void selectItem()
++ void pickUpObject(int)
++ void interactNPC(int)
++ void draw(Graphics2D)
++ void contactMonster(int)
++ void attacking()
+- void damageInteractiveTile(int)
++ void damageMonster(int,int)
+- void checkLevelUp()
+}
+class Projectile {
+~ Entity user
+~ int animationDuration
++ void set(int,int,String,boolean,Entity)
++ void update()
++ boolean haveResource(Entity)
++ void subtractResource(Entity)
+}
+class KeyHandler {
++ boolean upPressed
+~ GamePanel gp
+~ UI ui
+~ boolean debug
++ void keyTyped(KeyEvent)
++ void keyPressed(KeyEvent)
++ void keyReleased(KeyEvent)
+}
+class CollisionDetection {
+~ GamePanel gp
++ void checkTile(Entity)
++ int checkObject(Entity,boolean)
++ int checkEntity(Entity,Entity[])
++ boolean checkPlayer(Entity)
++ void entityDirection(Entity)
++ void getSolidAreaPosition(Entity)
++ void setSolidAreaPositionDefault(Entity)
+}
+class GamePanel {
+~ int originalTitleSize
+~ int scale
++ int tileSize
++ int maxScreenCol
++ int maxScreenRow
++ int screenWidth
++ int screenHeight
++ int maxWorldCol
++ int maxWorldRow
+~ int FPS
+~ int drawCount
+~ long timer
+~ int currentFps
+~ boolean musicPlaying
++ TileManager tileM
+~ Sound sEffects
+~ Sound music
+~ Font arial_20
++ UI ui
++ EventHandler eHandler
+~ KeyHandler keyH
++ CollisionDetection cChecker
++ AssetSetter aSetter
+~ Thread gameThread
++ Player player
++ Entity[] obj
++ Entity[] npc
++ Entity[] monster
++ InteractiveTile[] iTile
+~ ArrayList<Entity> entityList
++ ArrayList<Entity> projectileList
++ double drawInterval
++ int gameState
++ int titleState
++ int playState
++ int pauseState
++ int dialogueState
++ int settingsScreen
++ int characterState
++ void setupGame()
++ void startGameThread()
++ void run()
++ void update()
++ void paintComponent(Graphics)
++ void playMusic(int)
++ void stopMusic()
++ void playSE(int)
+}
+class OBJ_Heart {
++ void use(Entity)
+}
+class Main {
++ {static} void main(String[])
+}
+class OBJ_Coin_Bronze {
++ void use(Entity)
+}
+class OBJ_Sword_Normal {
+}
+
+
+Entity <|-- OBJ_Key
+Entity <|-- OBJ_Boots
+Entity <|-- OBJ_Door
+Projectile <|-- OBJ_Fireball
+Entity <|-- MON_RedSlime
+Entity <|-- OBJ_Shield_Wood
+Entity <|-- OBJ_Chest
+InteractiveTile <|-- IT_RottenTree
+Entity <|-- OBJ_Shield_diamond
+Entity <|-- OBJ_ManaCrystal
+Entity <|-- NPC_Mage
+Entity <|-- OBJ_Axe
+Entity <|-- InteractiveTile
+Entity <|-- OBJ_Potion_Red
+Projectile <|-- OBJ_Coconut
+InteractiveTile <|-- IT_Trunk
+Entity <|-- MON_GreenSlime
+Rectangle <|-- EventRect
+Entity <|-- Player
+Entity <|-- Projectile
+KeyListener <|.. KeyHandler
+Runnable <|.. GamePanel
+JPanel <|-- GamePanel
+Entity <|-- OBJ_Heart
+Entity <|-- OBJ_Coin_Bronze
+Entity <|-- OBJ_Sword_Normal
+@enduml

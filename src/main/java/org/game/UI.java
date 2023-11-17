@@ -1,9 +1,9 @@
 package org.game;
 
 import org.game.entity.Entity;
-import org.game.object.OBJ_Heart;
+import org.game.object.pickUpOnly.OBJ_Heart;
 import org.game.object.OBJ_Key;
-import org.game.object.OBJ_ManaCrystal;
+import org.game.object.pickUpOnly.OBJ_ManaCrystal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -50,11 +50,11 @@ public class UI {
         dText = new DisplayText(this.gp);
         keyImage = key.down1;
         // CREATE HUD OBJECT
-        Entity heart = new OBJ_Heart(gp);
+        Entity heart = new OBJ_Heart(0,0,gp);
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_broken = heart.image3;
-        Entity crystal = new OBJ_ManaCrystal(gp);
+        Entity crystal = new OBJ_ManaCrystal(0,0,gp);
         crystal_full = crystal.image;
         crystal_blank = crystal.image2;
     }
@@ -76,6 +76,7 @@ public class UI {
             i += 1;
             x += 35;
         }
+        int maxX = x;
         // DRAW MANA
         x = gp.tileSize*11;
         y = gp.tileSize*2 - 70;
@@ -91,7 +92,7 @@ public class UI {
             amount++;
             i++;
         }
-        dText.MakeText("+ " + amount,x + 5,y + 30,g2,g2.getFont().deriveFont(Font.ITALIC,24F),Color.white);
+        dText.MakeText("+ " + amount,maxX + 5,y + 30,g2,g2.getFont().deriveFont(Font.ITALIC,24F),Color.white);
     }
     public void draw(Graphics2D g2){
         this.g2 = g2;
@@ -132,10 +133,10 @@ public class UI {
         drawSubWindow(frameX,frameY,frameWidth,frameHeight);
 
         //SLOT
-        final int slotXstart = frameX + 20;
-        final int slotYstart = frameY + 20;
-        int slotX = slotXstart;
-        int slotY = slotYstart;
+        final int slotXStart = frameX + 20;
+        final int slotYStart = frameY + 20;
+        int slotX = slotXStart;
+        int slotY = slotYStart;
         int slotSize = gp.tileSize + 3;
 
         // DRAW PLAYER'S ITEMS
@@ -148,15 +149,15 @@ public class UI {
             g2.drawImage(gp.player.inventory.get(i).down1,slotX,slotY,null);
             slotX += slotSize;
             if(i == 4 || i == 9 || i == 14){
-                slotX = slotXstart;
+                slotX = slotXStart;
                 slotY += slotSize;
             }
         }
 
         // CURSOR
 
-        int cursorX = slotXstart + (slotSize * slotCol);
-        int cursorY = slotXstart + (slotSize * slotRow);
+        int cursorX = slotXStart + (slotSize * slotCol);
+        int cursorY = slotXStart + (slotSize * slotRow);
         int cursorWidth = gp.tileSize;
         int cursorHeight = gp.tileSize;
 
@@ -166,21 +167,19 @@ public class UI {
         g2.drawRoundRect(cursorX,cursorY,cursorWidth,cursorHeight,10,10);
 
         // DESCRIPTION FRAME
-        int dFrameX = frameX;
         int dFrameY = frameY + frameHeight;
-        int dFrameWidth = frameWidth;
         int dFrameHeight = gp.tileSize*3;
 
 
         // DRAW DESCRIPTION TEXT
-        int textX = dFrameX + 20;
+        int textX = frameX + 20;
         int textY = dFrameY + gp.tileSize;
         g2.setFont(g2.getFont().deriveFont(28f));
 
         int itemIndex = getItemIndexOnSlot();
 
         if(itemIndex < gp.player.inventory.size()){
-            drawSubWindow(dFrameX,dFrameY,dFrameWidth,dFrameHeight);
+            drawSubWindow(frameX,dFrameY, frameWidth,dFrameHeight);
             for(String line: gp.player.inventory.get(itemIndex).description.split("\n")){
                 g2.drawString(line,textX,textY);
                 textY += 32;
@@ -204,7 +203,6 @@ public class UI {
                 if(messageCounterBottom.get(i) > 120){
                     messageBottom.remove(i);
                     messageCounterBottom.remove(i);
-
                 }
             }
         }
@@ -241,52 +239,52 @@ public class UI {
 
         // VALUES
         int tailX = (frameX + frameWidth) - 30;
-        int textX = 0;
+        int textX;
         String value;
 
         frameY = gp.tileSize;
         value = String.valueOf(gp.player.level);
-        textX = getXforAlignToRightText(value,tailX);
+        textX = getXForAlignToRightText(value,tailX);
         dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
 
         frameY += 40;
-        value = String.valueOf(gp.player.life + " / " + gp.player.maxLife);
-        textX = getXforAlignToRightText(value,tailX);
+        value = gp.player.life + " / " + gp.player.maxLife;
+        textX = getXForAlignToRightText(value,tailX);
         dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
 
         frameY += 40;
         value = String.valueOf(gp.player.strength);
-        textX = getXforAlignToRightText(value,tailX);
+        textX = getXForAlignToRightText(value,tailX);
         dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
 
         frameY += 40;
         value = String.valueOf(gp.player.dexterity);
-        textX = getXforAlignToRightText(value,tailX);
+        textX = getXForAlignToRightText(value,tailX);
         dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
 
         frameY += 40;
         value = String.valueOf(gp.player.attack);
-        textX = getXforAlignToRightText(value,tailX);
+        textX = getXForAlignToRightText(value,tailX);
         dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
 
         frameY += 40;
         value = String.valueOf(gp.player.defense);
-        textX = getXforAlignToRightText(value,tailX);
+        textX = getXForAlignToRightText(value,tailX);
         dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
 
         frameY += 40;
         value = String.valueOf(gp.player.exp);
-        textX = getXforAlignToRightText(value,tailX);
+        textX = getXForAlignToRightText(value,tailX);
         dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
 
         frameY += 40;
         value = String.valueOf(gp.player.nextLevelExp);
-        textX = getXforAlignToRightText(value,tailX);
+        textX = getXForAlignToRightText(value,tailX);
         dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
 
         frameY += 40;
         value = String.valueOf(gp.player.coin);
-        textX = getXforAlignToRightText(value,tailX);
+        textX = getXForAlignToRightText(value,tailX);
         dText.MakeText(value,textX + 10,frameY + gp.tileSize,g2,g2.getFont().deriveFont(32F),Color.white);
 
         frameY += 48;
@@ -295,7 +293,7 @@ public class UI {
         frameY += 48;
         g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize + 10, frameY, null);
     }
-    public int getXforAlignToRightText(String text, int tailX){
+    public int getXForAlignToRightText(String text, int tailX){
         int length = (int)g2.getFontMetrics().getStringBounds(text,g2).getWidth();
         return tailX - length;
     }

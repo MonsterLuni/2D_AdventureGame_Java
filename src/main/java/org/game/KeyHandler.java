@@ -19,7 +19,7 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // PLAYSTATE
+        // PLAY-STATE
         if(gp.gameState == gp.playState){
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_W -> upPressed = true;
@@ -65,12 +65,14 @@ public class KeyHandler implements KeyListener {
                     gp.FPS = 60;
                     gp.drawInterval = (double) 1000000000 / gp.FPS;
                 }
+                case KeyEvent.VK_Q -> System.out.println("TO REMOVE");
             }
         }
         // DIALOGUE STATE
         else if(gp.gameState == gp.dialogueState){
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE -> gp.gameState = gp.playState;
+                case KeyEvent.VK_Q -> System.out.println("TO REMOVE");
             }
         }
         // TITLE STATE
@@ -109,9 +111,8 @@ public class KeyHandler implements KeyListener {
         // SETTINGS STATE
         else if(gp.gameState == gp.settingsScreen){
             switch (e.getKeyCode()){
-                case KeyEvent.VK_ESCAPE -> {
-                    gp.gameState = gp.titleState;
-                }
+                case KeyEvent.VK_ESCAPE -> gp.gameState = gp.titleState;
+                case KeyEvent.VK_Q -> System.out.println("TO REMOVE");
             }
         }
         // CHARACTER STATE

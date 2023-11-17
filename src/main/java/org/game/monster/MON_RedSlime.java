@@ -2,7 +2,7 @@ package org.game.monster;
 
 import org.game.GamePanel;
 import org.game.entity.Entity;
-import org.game.object.OBJ_Coconut;
+import org.game.object.projectile.OBJ_Coconut;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -68,7 +68,12 @@ public class MON_RedSlime extends Entity {
     }
     public void damageReaction(){
         actionLockCounter = 0;
-        direction = gp.player.direction;
+        switch (gp.player.direction){
+            case "up" -> direction = "down";
+            case "down" -> direction = "up";
+            case "left" -> direction = "right";
+            case "right" -> direction = "left";
+        }
     }
     @Override
     public void draw(Graphics2D g2) {
