@@ -29,6 +29,7 @@ public class UI {
     public String currentDialogue = "";
     public int slotCol;
     public int slotRow = 0;
+    public int substate;
     DecimalFormat dFormat = new DecimalFormat("#0.00");
     public boolean gameFinished = false;
     public int commandNum = 0;
@@ -121,8 +122,58 @@ public class UI {
                 drawCharacterScreen();
                 drawInventory();
             }
+            case 6 -> drawOptionScreen();
         }
     }
+
+    private void drawOptionScreen() {
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(32F));
+        int x = gp.tileSize*6;
+        int y = gp.tileSize;
+        // SUB WINDOW
+        drawSubWindow(gp.tileSize*6,gp.tileSize,gp.tileSize*8,gp.tileSize*10);
+
+        switch (substate){
+            case 0 -> option_top(x,y);
+        }
+    }
+
+    private void option_top(int frameX, int frameY) {
+        g2.setFont(g2.getFont().deriveFont(24F));
+        int textY = frameY + gp.tileSize;
+        // TITLE
+        dText.MakeTextCenter("Options",0,textY, g2, g2.getFont(),Color.white);
+
+        // FULL SCREEN ON / OFF
+        textY += gp.tileSize*2;
+        dText.MakeText("Full Screen",frameX + gp.tileSize,textY, g2, g2.getFont(),Color.white);
+        if(commandNum == 0){
+            g2.drawString(">", frameX+25, textY);
+        }
+
+        // MUSIC
+        textY += gp.tileSize;
+        dText.MakeText("Music",frameX + gp.tileSize,textY, g2, g2.getFont(),Color.white);
+        if(commandNum == 1){
+            g2.drawString(">", frameX+25, textY);
+        }
+
+        // SE
+        textY += gp.tileSize;
+        dText.MakeText("Sound Effects",frameX + gp.tileSize,textY, g2, g2.getFont(),Color.white);
+        if(commandNum == 2){
+            g2.drawString(">", frameX+25, textY);
+        }
+
+        // END GAME
+        textY += gp.tileSize;
+        dText.MakeText("End Game",frameX + gp.tileSize,textY, g2, g2.getFont(),Color.white);
+        if(commandNum == 3){
+            g2.drawString(">", frameX+25, textY);
+        }
+    }
+
     private void drawInventory() {
 
         // FRAME

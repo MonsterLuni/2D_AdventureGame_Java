@@ -1,0 +1,376 @@
+@startuml
+class org.game.object.OBJ_Key {
+}
+abstract class org.game.entity.Entity {
++ GamePanel gp
++ int worldX
++ int attackValue
++ int type_monster
++ int type_sword
++ int type_axe
++ int type_shield
++ int type_consumable
++ int type_pickUpOnly
++ Projectile projectile
++ Entity currentWeapon
++ Entity currentShield
++ String description
++ int actionLockCounter
++ int shotAvailableCounter
++ int animationDuration
++ int actionLockCounterNumber
++ int spriteCounter
++ int spriteNumber
++ int invincibleCounter
++ int dyingCounter
++ int hpBarCounter
++ boolean attacking
++ boolean collisionOn
++ boolean alive
++ boolean dying
++ boolean invincible
++ boolean collision
++ boolean hpBarOn
++ Rectangle solidArea
++ Rectangle attackArea
++ BufferedImage up1
++ BufferedImage attackUp1
++ String direction
++ String name
+~ int dialogueIndex
+~ String[] dialogues
++ BufferedImage setup(String,String,int,int)
++ BufferedImage setup(String,String)
++ void draw(Graphics2D)
++ void dyingAnimation(Graphics2D)
++ void damageReaction()
++ void setAction()
++ void update()
++ void damagePlayer(int)
++ void use(Entity)
++ void speak()
++ void checkDrop()
++ void dropItem(Entity)
++ void generateParticle(Entity,Entity)
++ Color getParticleColor()
++ int getParticleSize()
++ int getParticleSpeed()
++ int getParticleMaxLife()
+}
+class org.game.DisplayText {
+~ GamePanel gp
+~ Graphics2D g2
++ void MakeText(String,int,int,Graphics2D,Font,Color)
++ void MakeTextCenter(String,int,int,Graphics2D,Font,Color)
+}
+class org.game.object.upgrade.OBJ_Boots {
+}
+class org.game.object.OBJ_Door {
+}
+class org.game.object.projectile.OBJ_Fireball {
++ void getImage()
++ boolean haveResource(Entity)
++ void subtractResource(Entity)
++ Color getParticleColor()
++ int getParticleSize()
++ int getParticleSpeed()
++ int getParticleMaxLife()
+}
+class org.game.tile.Tile {
++ BufferedImage image
++ boolean collision
+}
+class org.game.Sound {
+~ Clip clip
+~ URL[] soundURL
++ void setFile(int)
++ void play()
++ void loop()
++ void stop()
+}
+class org.game.UI {
+~ GamePanel gp
+~ Graphics2D g2
+~ Font arial_40
+~ Font Kay
+~ BufferedImage keyImage
+~ DisplayText dText
+~ BufferedImage heart_full
++ boolean messageOn
++ String message
+~ int messageCounter
+~ ArrayList<String> messageBottom
+~ ArrayList<Integer> messageCounterBottom
+~ double playTime
++ String currentDialogue
++ int slotCol
++ int slotRow
+~ DecimalFormat dFormat
++ boolean gameFinished
++ int commandNum
++ int blinkOn
++ void showMessage(String)
++ void addMessage(String)
++ void drawPlayerMana()
++ void draw(Graphics2D)
+- void drawInventory()
++ int getItemIndexOnSlot()
+- void drawMessage()
+- void drawCharacterScreen()
++ int getXForAlignToRightText(String,int)
++ void drawPlayerLife()
++ void drawTitleScreen()
++ void drawSettingsScreen()
++ void drawPauseScreen()
++ void drawDialogueScreen()
++ void drawSubWindow(int,int,int,int)
++ void drawPlayScreen()
+}
+class org.game.EventHandler {
+~ GamePanel gp
+~ EventRect[][] eventRect
+~ int pEventX
+~ boolean canTouchEvent
++ void checkEvent()
++ boolean hit(int,int,String)
++ void damagePit(int)
++ void healingPool(int)
+}
+class org.game.monster.MON_RedSlime {
++ void getImage()
++ void setAction()
++ void damageReaction()
++ void draw(Graphics2D)
+}
+class org.game.object.upgrade.OBJ_Shield_Wood {
+}
+class org.game.object.OBJ_Chest {
+}
+class org.game.tile_interactive.IT_RottenTree {
++ boolean isCorrectItem(Entity)
++ void playSE()
++ InteractiveTile getDestroyedForm()
++ Color getParticleColor()
++ int getParticleSize()
++ int getParticleSpeed()
++ int getParticleMaxLife()
+}
+class org.game.object.upgrade.OBJ_Shield_diamond {
+}
+class org.game.UtilityTool {
++ BufferedImage scaleImage(BufferedImage,int,int)
+}
+class org.game.object.pickUpOnly.OBJ_ManaCrystal {
++ void use(Entity)
+}
+class org.game.entity.NPC_Mage {
++ void getImage()
++ void setDialogue()
++ void setAction()
++ void speak()
+}
+class org.game.object.upgrade.OBJ_Axe {
+}
+class org.game.tile_interactive.InteractiveTile {
++ boolean destructible
++ void update()
++ boolean isCorrectItem(Entity)
++ void playSE()
++ InteractiveTile getDestroyedForm()
+}
+class org.game.tile.TileManager {
+~ GamePanel gp
++ Tile[] tile
++ int[][] mapTileNum
++ void getTileImage()
++ void setup(int,String,boolean)
++ void loadMap(String)
++ void draw(Graphics2D)
+}
+class org.game.object.consumable.OBJ_Potion_Red {
++ void use(Entity)
+}
+class org.game.object.projectile.OBJ_Coconut {
++ void getImage()
++ Color getParticleColor()
++ int getParticleSize()
++ int getParticleSpeed()
++ int getParticleMaxLife()
+}
+class org.game.AssetSetter {
+~ GamePanel gp
++ void setObject()
++ void setNPC()
++ void setMonster()
++ void setInteractiveTile()
+}
+class org.game.tile_interactive.IT_Trunk {
+}
+class org.game.monster.MON_GreenSlime {
++ void getImage()
++ void setAction()
++ void damageReaction()
++ void draw(Graphics2D)
++ void checkDrop()
+}
+class org.game.EventRect {
+~ int eventRectDefaultX
+~ boolean eventDone
+}
+class org.game.entity.Player {
+~ KeyHandler keyH
++ int hasKey
++ int spriteCounterAttack
++ ArrayList<Entity> inventory
++ int inventorySize
++ void setDefaultValues()
++ void setItems()
++ int getAttack()
++ int getDefense()
++ void getPlayerImage()
++ void getPlayerAttackImage()
++ void update()
++ void selectItem()
++ void pickUpObject(int)
++ void interactNPC(int)
++ void draw(Graphics2D)
++ void contactMonster(int)
++ void attacking()
+- void damageInteractiveTile(int)
++ void damageMonster(int,int)
+- void checkLevelUp()
+}
+class org.game.entity.Projectile {
+~ Entity user
+~ int animationDuration
++ void set(int,int,String,boolean,Entity)
++ void update()
++ boolean haveResource(Entity)
++ void subtractResource(Entity)
+}
+class org.game.KeyHandler {
++ boolean upPressed
+~ GamePanel gp
+~ UI ui
+~ boolean debug
++ void keyTyped(KeyEvent)
++ void keyPressed(KeyEvent)
++ void keyReleased(KeyEvent)
+}
+class org.game.CollisionDetection {
+~ GamePanel gp
++ void checkTile(Entity)
++ int checkObject(Entity,boolean)
++ int checkEntity(Entity,Entity[])
++ boolean checkPlayer(Entity)
++ void entityDirection(Entity)
++ void getSolidAreaPosition(Entity)
++ void setSolidAreaPositionDefault(Entity)
+}
+class org.game.GamePanel {
+~ int originalTitleSize
+~ int scale
++ int tileSize
++ int maxScreenCol
++ int maxScreenRow
++ int screenWidth
++ int screenHeight
+~ int screenWidth2
+~ int screenHeight2
+~ BufferedImage tempScreen
+~ Graphics2D g2
++ int maxWorldCol
++ int maxWorldRow
+~ int FPS
+~ int drawCount
+~ long timer
+~ int currentFps
+~ boolean musicPlaying
++ TileManager tileM
+~ Sound sEffects
+~ Sound music
+~ Font arial_20
++ UI ui
++ EventHandler eHandler
+~ KeyHandler keyH
++ CollisionDetection cChecker
++ AssetSetter aSetter
+~ Thread gameThread
++ Player player
++ Entity[] obj
++ Entity[] npc
++ Entity[] monster
++ InteractiveTile[] iTile
+~ ArrayList<Entity> entityList
++ ArrayList<Entity> projectileList
++ ArrayList<Entity> particleList
++ double drawInterval
++ int gameState
++ int titleState
++ int playState
++ int pauseState
++ int dialogueState
++ int settingsScreen
++ int characterState
++ void setupGame()
++ void setFullScreen()
++ void startGameThread()
++ void run()
++ void update()
++ void drawToTempScreen(Graphics)
++ void drawToScreen()
++ void playMusic(int)
++ void stopMusic()
++ void playSE(int)
+}
+class org.game.object.pickUpOnly.OBJ_Heart {
++ void use(Entity)
+}
+class org.game.Main {
++ {static} JFrame window
++ {static} void main(String[])
+}
+class org.game.object.pickUpOnly.OBJ_Coin_Bronze {
++ void use(Entity)
+}
+class org.game.particle.Particle {
+~ Entity generator
+~ Color color
+~ int size
+~ int xd
+~ int yd
++ void update()
++ void draw(Graphics2D)
+}
+class org.game.object.upgrade.OBJ_Sword_Normal {
+}
+
+
+org.game.entity.Entity <|-- org.game.object.OBJ_Key
+org.game.entity.Entity <|-- org.game.object.upgrade.OBJ_Boots
+org.game.entity.Entity <|-- org.game.object.OBJ_Door
+org.game.entity.Projectile <|-- org.game.object.projectile.OBJ_Fireball
+org.game.entity.Entity <|-- org.game.monster.MON_RedSlime
+org.game.entity.Entity <|-- org.game.object.upgrade.OBJ_Shield_Wood
+org.game.entity.Entity <|-- org.game.object.OBJ_Chest
+org.game.tile_interactive.InteractiveTile <|-- org.game.tile_interactive.IT_RottenTree
+org.game.entity.Entity <|-- org.game.object.upgrade.OBJ_Shield_diamond
+org.game.entity.Entity <|-- org.game.object.pickUpOnly.OBJ_ManaCrystal
+org.game.entity.Entity <|-- org.game.entity.NPC_Mage
+org.game.entity.Entity <|-- org.game.object.upgrade.OBJ_Axe
+org.game.entity.Entity <|-- org.game.tile_interactive.InteractiveTile
+org.game.entity.Entity <|-- org.game.object.consumable.OBJ_Potion_Red
+org.game.entity.Projectile <|-- org.game.object.projectile.OBJ_Coconut
+org.game.tile_interactive.InteractiveTile <|-- org.game.tile_interactive.IT_Trunk
+org.game.entity.Entity <|-- org.game.monster.MON_GreenSlime
+java.awt.Rectangle <|-- org.game.EventRect
+org.game.entity.Entity <|-- org.game.entity.Player
+org.game.entity.Entity <|-- org.game.entity.Projectile
+java.awt.event.KeyListener <|.. org.game.KeyHandler
+org.game.Runnable <|.. org.game.GamePanel
+org.game.JPanel <|-- org.game.GamePanel
+org.game.entity.Entity <|-- org.game.object.pickUpOnly.OBJ_Heart
+org.game.entity.Entity <|-- org.game.object.pickUpOnly.OBJ_Coin_Bronze
+org.game.entity.Entity <|-- org.game.particle.Particle
+org.game.entity.Entity <|-- org.game.object.upgrade.OBJ_Sword_Normal
+@enduml

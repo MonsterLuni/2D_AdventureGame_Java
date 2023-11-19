@@ -16,7 +16,6 @@ public class KeyHandler implements KeyListener {
     boolean debug = false;
     @Override
     public void keyTyped(KeyEvent e) {}
-
     @Override
     public void keyPressed(KeyEvent e) {
         // PLAY-STATE
@@ -28,6 +27,7 @@ public class KeyHandler implements KeyListener {
                 case KeyEvent.VK_D -> rightPressed = true;
                 case KeyEvent.VK_E -> ePressed = true;
                 case KeyEvent.VK_T -> gp.player.life--;
+                case KeyEvent.VK_Z -> gp.gameState = gp.optionState;
                 case KeyEvent.VK_I -> gp.gameState = gp.characterState;
                 case KeyEvent.VK_SPACE -> shotKeyPressed = true;
                 case KeyEvent.VK_ENTER -> {
@@ -38,8 +38,7 @@ public class KeyHandler implements KeyListener {
                 }
                 case KeyEvent.VK_ESCAPE -> {
                     gp.gameState = gp.pauseState;
-                    gp.FPS = 5;
-                    gp.drawInterval = (double) 1000000000 / gp.FPS;
+                    setFPS(5);
                 }
                 // DEBUG
                 case KeyEvent.VK_F3 -> debug = !debug;
@@ -62,8 +61,7 @@ public class KeyHandler implements KeyListener {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE -> {
                     gp.gameState = gp.playState;
-                    gp.FPS = 60;
-                    gp.drawInterval = (double) 1000000000 / gp.FPS;
+                    setFPS(60);
                 }
                 case KeyEvent.VK_Q -> System.out.println("TO REMOVE");
             }
@@ -142,8 +140,20 @@ public class KeyHandler implements KeyListener {
                 }
             }
         }
+        // OPTION STATE
+        else if (gp.gameState == gp.optionState){
+            switch (e.getKeyCode()){
+                case KeyEvent.VK_Z -> gp.gameState = gp.playState;
+                case KeyEvent.VK_Q -> System.out.println("TO REMOVE");
+                case KeyEvent.VK_W, KeyEvent.VK_UP -> ui.commandNum--;
+                case KeyEvent.VK_S, KeyEvent.VK_DOWN -> ui.commandNum++;
+            }
+        }
     }
-
+    public void setFPS(int fps){
+        gp.FPS = fps;
+        gp.drawInterval = (double) 1000000000 / gp.FPS;
+    }
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()){

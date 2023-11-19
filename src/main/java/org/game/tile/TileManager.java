@@ -17,16 +17,16 @@ public class TileManager {
         tile = new Tile[10];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
-        loadMap("src/main/res/maps/world01.txt");
+        loadMap("src/main/res/maps/Map01.txt");
     }
     public void getTileImage(){
         System.out.println("Tile loading started");
-        setup(0,"grass",false);
-        setup(1,"wall",true);
-        setup(2,"water",true);
-        setup(3,"earth",false);
-        setup(4,"tree",true);
-        setup(5,"sand",false);
+        setup(0,"00_grass",false);
+        setup(1,"01_earth",false);
+        setup(2,"02_sand",false);
+        setup(3,"03_tree",true);
+        setup(4,"04_wall",true);
+        setup(5,"05_water",true);
         System.out.println("Tile loading ended");
     }
     public void setup(int index, String imageName, boolean collision){
