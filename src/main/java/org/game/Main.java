@@ -11,10 +11,14 @@ public class Main {
         window.setResizable(false);
         window.setTitle("2D Adventure");
         window.setIconImage(img.getImage());
-        window.setUndecorated(true);
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
+
+        gamePanel.config.loadConfig();
+        if(gamePanel.fullScreenOn){
+            window.setUndecorated(true);
+        }
 
         window.pack();
 

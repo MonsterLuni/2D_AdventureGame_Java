@@ -123,9 +123,34 @@ public class UI {
                 drawInventory();
             }
             case 6 -> drawOptionScreen();
+            case 7 -> drawGameOverScreen();
         }
     }
 
+    private void drawGameOverScreen() {
+        g2.setColor(new Color(0,0,0,150));
+        g2.fillRect(0,0,gp.screenWidth,gp.screenHeight);
+
+        int y = gp.tileSize*5;
+
+        // SHADOW
+        dText.MakeTextCenter("GameOver",0,y,g2,g2.getFont().deriveFont(Font.BOLD, 110f),Color.black);
+
+        // MAIN
+        dText.MakeTextCenter("GameOver",-4,y-4,g2,g2.getFont().deriveFont(Font.BOLD, 110f),Color.white);
+
+        // Retry
+        dText.MakeTextCenter("Retry",-4,y + gp.tileSize*3,g2,g2.getFont().deriveFont(Font.BOLD, 50f),Color.white);
+        if(commandNum == 0){
+            dText.MakeTextCenter(">",-gp.tileSize*2,y + gp.tileSize*3,g2,g2.getFont().deriveFont(Font.BOLD, 50f),Color.white);
+        }
+
+        // Back to the title Screen
+        dText.MakeTextCenter("Quit",-4,y + gp.tileSize*4 + 10,g2,g2.getFont().deriveFont(Font.BOLD, 50f),Color.white);
+        if(commandNum == 1){
+            dText.MakeTextCenter(">",-gp.tileSize*2 + 15,y + gp.tileSize*4 + 10,g2,g2.getFont().deriveFont(Font.BOLD, 50f),Color.white);
+        }
+    }
     private void drawOptionScreen() {
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(32F));
@@ -136,9 +161,17 @@ public class UI {
 
         switch (substate){
             case 0 -> option_top(x,y);
+            case 1 -> options_fullScreenNotification(x,y);
+            case 2 -> options_control(x,y);
+            case 3 -> options_endGameConfirmation();
         }
+        gp.keyH.enterPressed = false;
     }
-
+    private void options_endGameConfirmation() {
+        //TODO: Video 35 41.11 make that
+        substate = 0;
+        gp.gameState = gp.titleState;
+    }
     private void option_top(int frameX, int frameY) {
         g2.setFont(g2.getFont().deriveFont(24F));
         int textY = frameY + gp.tileSize;
@@ -150,6 +183,15 @@ public class UI {
         dText.MakeText("Full Screen",frameX + gp.tileSize,textY, g2, g2.getFont(),Color.white);
         if(commandNum == 0){
             g2.drawString(">", frameX+25, textY);
+            if(gp.keyH.enterPressed){
+                if(gp.fullScreenOn){
+                    gp.fullScreenOn = false;
+                }
+                else {
+                    gp.fullScreenOn = true;
+                }
+                substate = 1;
+            }
         }
 
         // MUSIC
@@ -166,14 +208,95 @@ public class UI {
             g2.drawString(">", frameX+25, textY);
         }
 
+        // CONTROL
+        textY += gp.tileSize;
+        dText.MakeText("Control",frameX + gp.tileSize,textY, g2, g2.getFont(),Color.white);
+        if(commandNum == 3){
+            g2.drawString(">", frameX+25, textY);
+            if(gp.keyH.enterPressed){
+                substate = 2;
+                commandNum = 0;
+            }
+        }
+
         // END GAME
         textY += gp.tileSize;
         dText.MakeText("End Game",frameX + gp.tileSize,textY, g2, g2.getFont(),Color.white);
-        if(commandNum == 3){
+        if(commandNum == 4){
             g2.drawString(">", frameX+25, textY);
+            if(gp.keyH.enterPressed){
+                substate = 3;
+                commandNum = 0;
+            }
         }
-    }
+        int textX;
 
+        // FULL SCREEN CHECK BOX
+        g2.setStroke(new BasicStroke(1));
+        textX = frameX + gp.tileSize*5;
+        textY = frameY + gp.tileSize*2 + 24;
+        g2.drawRect(textX,textY,24,24);
+        if(gp.fullScreenOn){
+            g2.fillRect(textX,textY,24,24);
+        }
+
+        // MUSIC VOLUME
+        textY += gp.tileSize;
+        g2.drawRect(textX,textY,120,24); // 120/5 = 24
+        int volumeWidth = 24*gp.music.volumeScale;
+        g2.fillRect(textX,textY,volumeWidth,24);
+
+        // SE VOLUME
+        textY += gp.tileSize;
+        g2.drawRect(textX,textY,120,24);
+        volumeWidth = 24*gp.sEffects.volumeScale;
+        g2.fillRect(textX,textY,volumeWidth,24);
+
+        gp.config.saveConfig();
+    }
+    public void options_control(int frameX, int frameY){
+        int textY = frameY + gp.tileSize;
+        int textX;
+        // TITLE
+        String text = "Control";
+        dText.MakeTextCenter(text,0,textY,g2,g2.getFont(),Color.white);
+        textY += gp.tileSize;
+        dText.MakeText("Move",frameX + 25,textY += gp.tileSize,g2,g2.getFont(),Color.white);
+        dText.MakeText("Confirm",frameX + 25,textY += gp.tileSize,g2,g2.getFont(),Color.white);
+        dText.MakeText("Shoot / Cast",frameX + 25,textY += gp.tileSize,g2,g2.getFont(),Color.white);
+        dText.MakeText("Character Screen",frameX + 25,textY += gp.tileSize,g2,g2.getFont(),Color.white);
+        dText.MakeText("Pause",frameX + 25,textY += gp.tileSize,g2,g2.getFont(),Color.white);
+        dText.MakeText("Options",frameX + 25,textY + gp.tileSize,g2,g2.getFont(),Color.white);
+
+        textY = frameY + gp.tileSize*2;
+        textX = frameX + gp.tileSize*7;
+
+        dText.MakeText("A",textX,textY += gp.tileSize,g2,g2.getFont(),Color.white);
+        dText.MakeText("B",textX,textY += gp.tileSize,g2,g2.getFont(),Color.white);
+        dText.MakeText("C",textX,textY += gp.tileSize,g2,g2.getFont(),Color.white);
+        dText.MakeText("D",textX,textY += gp.tileSize,g2,g2.getFont(),Color.white);
+        dText.MakeText("E",textX,textY += gp.tileSize,g2,g2.getFont(),Color.white);
+        dText.MakeText("F",textX,textY + gp.tileSize,g2,g2.getFont(),Color.white);
+    }
+    public void options_fullScreenNotification(int frameX, int frameY){
+        currentDialogue = "The change will take \neffect after restarting \nthe game.";
+
+        for(String line: currentDialogue.split("\n")){
+            g2.drawString(line, frameX + gp.tileSize/2,frameY + gp.tileSize*3);
+            frameY += 40;
+        }
+
+        // BACK
+        frameY += gp.tileSize*6;
+        g2.drawString("Back",frameX + gp.tileSize/2,frameY);
+        if(commandNum == 0){
+            g2.drawString(">",frameX + gp.tileSize/2 - 25,frameY);
+            if(gp.keyH.enterPressed){
+                substate = 0;
+            }
+        }
+
+    }
     private void drawInventory() {
 
         // FRAME

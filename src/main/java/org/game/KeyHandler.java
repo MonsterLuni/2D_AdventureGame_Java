@@ -5,7 +5,8 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed, shotKeyPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed, shotKeyPressed,enterPressed;
+    int maxCommandNum = 0;
     GamePanel gp;
     UI ui;
     public KeyHandler(GamePanel gp, UI ui){
@@ -99,7 +100,7 @@ public class KeyHandler implements KeyListener {
                             System.out.println("Music loading ended");
                         }
                         case 1 -> System.out.println("Coming soon...");
-                        case 2 -> gp.gameState = gp.settingsScreen;
+                        case 2 -> gp.gameState = gp.optionState;
                         case 3 -> System.exit(0);
                     }
                 }
@@ -143,10 +144,78 @@ public class KeyHandler implements KeyListener {
         // OPTION STATE
         else if (gp.gameState == gp.optionState){
             switch (e.getKeyCode()){
+                case KeyEvent.VK_ENTER -> enterPressed = true;
                 case KeyEvent.VK_Z -> gp.gameState = gp.playState;
                 case KeyEvent.VK_Q -> System.out.println("TO REMOVE");
-                case KeyEvent.VK_W, KeyEvent.VK_UP -> ui.commandNum--;
-                case KeyEvent.VK_S, KeyEvent.VK_DOWN -> ui.commandNum++;
+                case KeyEvent.VK_W, KeyEvent.VK_UP -> {
+                    ui.commandNum--;
+                    if(ui.commandNum < 0){
+                        ui.commandNum = maxCommandNum;
+                    }
+                }
+                case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
+                    ui.commandNum++;
+                    if(ui.commandNum > maxCommandNum){
+                        ui.commandNum = 0;
+                    }
+                }
+                case KeyEvent.VK_A -> {
+                    if(ui.substate == 0){
+                        if(ui.commandNum == 1 && gp.music.volumeScale > 0){
+                            gp.music.volumeScale--;
+                            gp.music.checkVolume();
+                        }
+                        if(ui.commandNum == 2 && gp.sEffects.volumeScale > 0){
+                            gp.sEffects.volumeScale--;
+                            gp.playSE(1);
+                        }
+                    }
+                }
+                case KeyEvent.VK_D -> {
+                    if(ui.substate == 0){
+                        if(ui.commandNum == 1 && gp.music.volumeScale < 5){
+                            gp.music.volumeScale++;
+                            gp.music.checkVolume();
+                        }
+                        if(ui.commandNum == 2 && gp.sEffects.volumeScale < 5){
+                            gp.sEffects.volumeScale++;
+                            gp.playSE(1);
+                        }
+                    }
+                }
+            }
+            switch (ui.substate){
+                case 0 -> maxCommandNum = 4;
+            }
+        }
+        // GAME OVER STATE
+        else if (gp.gameState == gp.gameOverState) {
+            switch (e.getKeyCode()){
+                case KeyEvent.VK_W -> {
+                    ui.commandNum++;
+                    if(ui.commandNum > 1){
+                        ui.commandNum = 0;
+                    }
+                }
+                case KeyEvent.VK_S -> {
+                    ui.commandNum--;
+                    if(ui.commandNum < 0){
+                        ui.commandNum = 1;
+                    }
+                }
+                case KeyEvent.VK_ENTER -> {
+                    if(gp.ui.commandNum == 0){
+                        gp.gameState = gp.playState;
+                        gp.stopMusic();
+                        gp.retry();
+                        gp.playMusic(0);
+                    }
+                    else if(gp.ui.commandNum == 1){
+                        gp.gameState = gp.titleState;
+                        gp.stopMusic();
+                        gp.restart();
+                    }
+                }
             }
         }
     }

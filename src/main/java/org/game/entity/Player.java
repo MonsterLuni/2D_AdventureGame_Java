@@ -60,10 +60,20 @@ public class Player extends Entity{
         defense = getDefense();
         animationDuration = 15;
     }
+    public void setDefaultPositions(){
+        worldX = gp.tileSize * gp.maxWorldCol/2 - gp.tileSize * 2;
+        worldY = gp.tileSize * 21;
+        direction = "down";
+    }
+    public void restoreLifeAndMana(){
+        mana = maxMana;
+        life = maxLife;
+        invincible = false;
+    }
     public void setItems(){
+        inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Axe(0,0,gp));
     }
     public int getAttack(){
         attackArea = currentWeapon.attackArea;
@@ -192,6 +202,10 @@ public class Player extends Entity{
                     case "right" -> worldX += speed;
                 }
             }
+        }
+        if(life <= 0){
+
+            gp.gameState = gp.gameOverState;
         }
     }
     public void selectItem(){

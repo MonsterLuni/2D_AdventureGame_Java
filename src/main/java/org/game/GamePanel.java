@@ -55,11 +55,12 @@ public class GamePanel extends JPanel implements Runnable{
      */
     //SYSTEM
     public TileManager tileM = new TileManager(this);
-    Sound sEffects = new Sound();
-    Sound music = new Sound();
+    public Sound sEffects = new Sound();
+    public Sound music = new Sound();
     Font arial_20;
     public UI ui = new UI(this);
     public EventHandler eHandler = new EventHandler(this);
+    Config config = new Config(this);
     KeyHandler keyH = new KeyHandler(this, this.ui);
     public CollisionDetection cChecker = new CollisionDetection(this);
     public AssetSetter aSetter = new AssetSetter(this);
@@ -84,6 +85,8 @@ public class GamePanel extends JPanel implements Runnable{
     public final int settingsScreen = 4;
     public final int characterState = 5;
     public final int optionState = 6;
+    public final int gameOverState = 7;
+    public boolean fullScreenOn = false;
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -91,6 +94,20 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(keyH);
         this.setFocusable(true);
         arial_20 = new Font("arial", Font.ITALIC, 20);
+    }
+    public void retry(){
+        player.setDefaultPositions();
+        player.restoreLifeAndMana();
+        aSetter.setMonster();
+        aSetter.setNPC();
+    }
+    public void restart(){
+        player.setDefaultValues();
+        player.setItems();
+        aSetter.setObject();
+        aSetter.setNPC();
+        aSetter.setMonster();
+        aSetter.setInteractiveTile();
     }
     public void setupGame(){
         System.out.println("Object loading started");
@@ -110,7 +127,9 @@ public class GamePanel extends JPanel implements Runnable{
         tempScreen = new BufferedImage(screenWidth, screenHeight,BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D) tempScreen.getGraphics();
 
-        setFullScreen();
+        if(fullScreenOn){
+            setFullScreen();
+        }
     }
     public void setFullScreen(){
         // GET LOCAL SCREEN DEVICE
