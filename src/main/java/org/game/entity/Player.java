@@ -3,7 +3,6 @@ package org.game.entity;
 import org.game.GamePanel;
 import org.game.KeyHandler;
 import org.game.object.projectile.OBJ_Fireball;
-import org.game.object.upgrade.OBJ_Axe;
 import org.game.object.upgrade.OBJ_Shield_Wood;
 import org.game.object.upgrade.OBJ_Sword_Normal;
 
@@ -16,8 +15,6 @@ public class Player extends Entity{
     KeyHandler keyH;
     public int hasKey = 0;
     public int spriteCounterAttack = 0;
-    public ArrayList<Entity> inventory = new ArrayList<>();
-    public final int inventorySize = 20;
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
         this.keyH = keyH;
@@ -37,7 +34,6 @@ public class Player extends Entity{
         setItems();
     }
     public void setDefaultValues(){
-        //TODO: make that this is in the middle
         worldX = gp.tileSize * gp.maxWorldCol/2 - gp.tileSize * 2;
         worldY = gp.tileSize * 21;
         speed = 4;
@@ -204,7 +200,7 @@ public class Player extends Entity{
             }
         }
         if(life <= 0){
-
+            gp.ui.commandNum = -1;
             gp.gameState = gp.gameOverState;
         }
     }
@@ -230,19 +226,19 @@ public class Player extends Entity{
     public void pickUpObject(int i){
         if(i != 999){
             // PICKUP ONLY ITEMS
-            if(gp.obj[i].type == type_pickUpOnly){
-                gp.obj[i].use(this);
+            if(gp.obj[gp.currentMap][i].type == type_pickUpOnly){
+                gp.obj[gp.currentMap][i].use(this);
             }
             else {
                 // INVENTORY ITEMS
-                if(inventory.size() != inventorySize && !Objects.equals(gp.obj[i].name, "Door") && !Objects.equals(gp.obj[i].name, "Chest")){
-                    inventory.add(gp.obj[i]);
-                    gp.ui.addMessage("Got " + gp.obj[i].name);
+                if(inventory.size() != inventorySize && !Objects.equals(gp.obj[gp.currentMap][i].name, "Door") && !Objects.equals(gp.obj[gp.currentMap][i].name, "Chest")){
+                    inventory.add(gp.obj[gp.currentMap][i]);
+                    gp.ui.addMessage("Got " + gp.obj[gp.currentMap][i].name);
                 }
                 else {
                     gp.ui.showMessage("You feel too heavy...");
                 }
-                String objectName = gp.obj[i].name;
+                String objectName = gp.obj[gp.currentMap][i].name;
                 switch(objectName){
                     case "Red Potion" -> {
                         gp.playSE(1);
@@ -296,14 +292,14 @@ public class Player extends Entity{
                 mana = maxMana;
             }
             // DELETE OBJECT
-            gp.obj[i] = null;
+            gp.obj[gp.currentMap][i] = null;
         }
     }
     public void interactNPC(int i){
         if(i != 999){
             if(keyH.ePressed){
                 gp.gameState = gp.dialogueState;
-                gp.npc[i].speak();
+                gp.npc[gp.currentMap][i].speak();
             }
         }
     }
@@ -368,10 +364,10 @@ public class Player extends Entity{
     }
     public void contactMonster(int i){
         if(i != 999){
-            if(!invincible && !gp.monster[i].dying){
+            if(!invincible && !gp.monster[gp.currentMap][i].dying){
                 gp.playSE(6);
 
-                int damage = gp.monster[i].attack - defense;
+                int damage = gp.monster[gp.currentMap][i].attack - defense;
                 if(damage < 0){
                     damage = 0;
                 }
@@ -426,37 +422,37 @@ public class Player extends Entity{
         }
     }
     private void damageInteractiveTile(int i) {
-        if(i != 999 && gp.iTile[i].destructible && gp.iTile[i].isCorrectItem(this) && !gp.iTile[i].invincible){
-            gp.iTile[i].life--;
-            gp.iTile[i].invincible = true;
+        if(i != 999 && gp.iTile[gp.currentMap][i].destructible && gp.iTile[gp.currentMap][i].isCorrectItem(this) && !gp.iTile[gp.currentMap][i].invincible){
+            gp.iTile[gp.currentMap][i].life--;
+            gp.iTile[gp.currentMap][i].invincible = true;
 
-            generateParticle(gp.iTile[i], gp.iTile[i]);
+            generateParticle(gp.iTile[gp.currentMap][i], gp.iTile[gp.currentMap][i]);
 
-            if(gp.iTile[i].life == 0){
-                gp.iTile[i].playSE();
-                gp.iTile[i] = gp.iTile[i].getDestroyedForm();
+            if(gp.iTile[gp.currentMap][i].life == 0){
+                gp.iTile[gp.currentMap][i].playSE();
+                gp.iTile[gp.currentMap][i] = gp.iTile[gp.currentMap][i].getDestroyedForm();
             }
         }
     }
     public void damageMonster(int i, int attack){
         if(i != 999){
-            if(!gp.monster[i].invincible){
+            if(!gp.monster[gp.currentMap][i].invincible){
                 gp.playSE(5);
 
-                int damage = attack - gp.monster[i].defense;
+                int damage = attack - gp.monster[gp.currentMap][i].defense;
                 if(damage < 0){
                     damage = 0;
                 }
-                gp.monster[i].life -= damage;
+                gp.monster[gp.currentMap][i].life -= damage;
                 gp.ui.addMessage(damage + " damage!");
 
-                gp.monster[i].invincible = true;
-                gp.monster[i].damageReaction();
-                if(gp.monster[i].life <= 0){
-                    gp.monster[i].dying = true;
-                    gp.ui.addMessage("Killed the " + gp.monster[i].name + "!");
-                    gp.ui.addMessage("Exp +" + gp.monster[i].exp);
-                    exp += gp.monster[i].exp;
+                gp.monster[gp.currentMap][i].invincible = true;
+                gp.monster[gp.currentMap][i].damageReaction();
+                if(gp.monster[gp.currentMap][i].life <= 0){
+                    gp.monster[gp.currentMap][i].dying = true;
+                    gp.ui.addMessage("Killed the " + gp.monster[gp.currentMap][i].name + "!");
+                    gp.ui.addMessage("Exp +" + gp.monster[gp.currentMap][i].exp);
+                    exp += gp.monster[gp.currentMap][i].exp;
                     checkLevelUp();
                 }
             }

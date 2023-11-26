@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public abstract class Entity {
     public GamePanel gp;
@@ -42,6 +43,9 @@ public abstract class Entity {
     public int invincibleCounter = 0;
     public int dyingCounter = 0;
     public int hpBarCounter = 0;
+
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int inventorySize = 20;
 
     // BOOLEANS
     public boolean attacking = false;
@@ -96,12 +100,22 @@ public abstract class Entity {
                 worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
                 worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
             BufferedImage image = null;
+            if(spriteNumber == 1){
                 switch(direction){
                     case "up" -> image = up1;
                     case "down" -> image = down1;
                     case "left" -> image = left1;
                     case "right" -> image = right1;
                 }
+            }
+            else {
+                switch(direction){
+                    case "up" -> image = up2;
+                    case "down" -> image = down2;
+                    case "left" -> image = left2;
+                    case "right" -> image = right2;
+                }
+            }
             // Monster HP bar
             if(type == 2 && hpBarOn){
                 // find current length of bar
@@ -222,11 +236,11 @@ public abstract class Entity {
 
     }
     public void dropItem(Entity droppedItem){
-        for (int i = 0; i < gp.obj.length; i++){
-            if(gp.obj[i] == null){
-                gp.obj[i] = droppedItem;
-                gp.obj[i].worldX = worldX; // the ones from the dead monster
-                gp.obj[i].worldY = worldY; // the ones from the dead monster
+        for (int i = 0; i < gp.obj[1].length; i++){
+            if(gp.obj[gp.currentMap][i] == null){
+                gp.obj[gp.currentMap][i] = droppedItem;
+                gp.obj[gp.currentMap][i].worldX = worldX; // the ones from the dead monster
+                gp.obj[gp.currentMap][i].worldY = worldY; // the ones from the dead monster
                 break;
             }
         }

@@ -24,23 +24,23 @@ public class CollisionDetection {
         switch(entity.direction){
             case "up" -> {
                 entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize;
-                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
+                tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
+                tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];
             }
             case "down" -> {
                 entityBottomRow = (entityBottomWorldY - entity.speed)/gp.tileSize;
-                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
+                tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityBottomRow];
+                tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityBottomRow];
             }
             case "left" -> {
                 entityLeftCol = (entityLeftWorldX - entity.speed)/gp.tileSize;
-                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
+                tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
+                tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityBottomRow];
             }
             case "right" -> {
                 entityRightCol = (entityRightWorldX - entity.speed)/gp.tileSize;
-                tileNum1 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
+                tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];
+                tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityBottomRow];
             }
         }
         if(gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision){
@@ -50,15 +50,15 @@ public class CollisionDetection {
     public int checkObject(Entity entity, boolean player){
         int index = 999;
 
-        for(int i = 0; i < gp.obj.length; i++){
-            if(gp.obj[i] != null){
+        for(int i = 0; i < gp.obj[1].length; i++){
+            if(gp.obj[gp.currentMap][i] != null){
                 getSolidAreaPosition(entity);
-                getSolidAreaPosition(gp.obj[i]);
+                getSolidAreaPosition(gp.obj[gp.currentMap][i]);
 
                 entityDirection(entity);
 
-                if(entity.solidArea.intersects(gp.obj[i].solidArea)){
-                    if(gp.obj[i].collision){
+                if(entity.solidArea.intersects(gp.obj[gp.currentMap][i].solidArea)){
+                    if(gp.obj[gp.currentMap][i].collision){
                         entity.collisionOn = true;
                     }
                     if(player){
@@ -66,30 +66,31 @@ public class CollisionDetection {
                     }
                 }
                 setSolidAreaPositionDefault(entity);
-                setSolidAreaPositionDefault(gp.obj[i]);
+                setSolidAreaPositionDefault(gp.obj[gp.currentMap][i]);
             }
         }
         return index;
     }
     //NPC OR MONSTER COLLISION
-    public int checkEntity(Entity entity, Entity[] target){
+    public int checkEntity(Entity entity, Entity[][] target){
         int index = 999;
 
-        for(int i = 0; i < target.length; i++){
-            if(target[i] != null){
+        for(int i = 0; i < target[1].length; i++){
+            if(target[gp.currentMap][i] != null){
                 getSolidAreaPosition(entity);
-                getSolidAreaPosition(target[i]);
+
+                getSolidAreaPosition(target[gp.currentMap][i]);
 
                 entityDirection(entity);
 
-                if(entity.solidArea.intersects(target[i].solidArea)){
-                    if(target[i] != entity){
+                if(entity.solidArea.intersects(target[gp.currentMap][i].solidArea)){
+                    if(target[gp.currentMap][i] != entity){
                         entity.collisionOn = true;
                         index = i;
                     }
                 }
                 setSolidAreaPositionDefault(entity);
-                setSolidAreaPositionDefault(target[i]);
+                setSolidAreaPositionDefault(target[gp.currentMap][i]);
             }
         }
         return index;

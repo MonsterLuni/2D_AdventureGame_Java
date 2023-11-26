@@ -18,6 +18,10 @@ public class NPC_Mage extends Entity{
         down1 = setup("npc","mage_down_1");
         left1 = setup("npc","mage_left_1");
         right1 = setup("npc","mage_right_1");
+        up2 = setup("npc","mage_up_1");
+        down2 = setup("npc","mage_down_1");
+        left2 = setup("npc","mage_left_1");
+        right2 = setup("npc","mage_right_1");
         System.out.println("npc loading ended");
     }
     public void setDialogue(){

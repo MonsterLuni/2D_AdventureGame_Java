@@ -124,6 +124,23 @@ public class UI {
             }
             case 6 -> drawOptionScreen();
             case 7 -> drawGameOverScreen();
+            case 8 -> transitionScreen();
+        }
+    }
+    int counter = 0;
+
+    private void transitionScreen() {
+        counter++;
+        g2.setColor(new Color(0,0,0,counter * 5));
+        g2.fillRect(0,0,gp.screenWidth,gp.screenHeight);
+        if(counter == 50){
+            counter = 0;
+            gp.gameState = gp.playState;
+            gp.currentMap = gp.eHandler.tempMap;
+            gp.player.worldX = gp.tileSize * gp.eHandler.tempCol;
+            gp.player.worldY = gp.tileSize * gp.eHandler.tempRow;
+            gp.eHandler.pEventX = gp.player.worldX;
+            gp.eHandler.pEventY = gp.player.worldY;
         }
     }
 
