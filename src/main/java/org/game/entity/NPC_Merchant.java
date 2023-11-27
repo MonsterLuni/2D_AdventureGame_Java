@@ -24,13 +24,17 @@ public class NPC_Merchant extends Entity{
         System.out.println("merchant loading ended");
     }
     public void setDialogue(){
-        dialogues[0] = "You found me...";
-        dialogues[1] = "You shouldn't be here...";
+        dialogues[0] = "You found me... \nI have some good stuff for you...\nDo you want to trade?";
     }
     public void setItems(){
         inventory.add(new OBJ_ManaCrystal(0,0,gp));
         inventory.add(new OBJ_ManaCrystal(0,0,gp));
         inventory.add(new OBJ_ManaCrystal(0,0,gp));
         inventory.add(new OBJ_ManaCrystal(0,0,gp));
+    }
+    public void speak(){
+        super.speak();
+        gp.gameState = gp.tradeState;
+        gp.ui.npc = this;
     }
 }

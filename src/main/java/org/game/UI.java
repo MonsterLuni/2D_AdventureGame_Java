@@ -34,6 +34,8 @@ public class UI {
     public boolean gameFinished = false;
     public int commandNum = 0;
     public int blinkOn = 0;
+    public Entity npc;
+
     public UI(GamePanel gp){
         this.gp = gp;
         arial_40 = new Font("Arial", Font.PLAIN, 40);
@@ -125,8 +127,44 @@ public class UI {
             case 6 -> drawOptionScreen();
             case 7 -> drawGameOverScreen();
             case 8 -> transitionScreen();
+            case 9 -> drawTradeScreen();
         }
     }
+
+    private void drawTradeScreen() {
+        switch (substate){
+            case 0: trade_select();
+            case 1: trade_buy();
+            case 2: trade_sell();
+        }
+        gp.keyH.enterPressed = false;
+    }
+    public void trade_select(){
+        drawDialogueScreen();
+        int x = gp.tileSize * 15;
+        int y = gp.tileSize * 5;
+        int width = gp.tileSize * 3;
+        int height = (int)(gp.tileSize * 3.5);
+
+        // WINDOW
+        drawSubWindow(x,y,width,height);
+
+        // DRAW TEXTS
+        x += gp.tileSize;
+        y += gp.tileSize;
+        g2.drawString("Buy",x,y);
+        y += gp.tileSize;
+        g2.drawString("Sell",x,y);
+        y += gp.tileSize;
+        g2.drawString("Leave",x,y);
+    }
+    public void trade_buy(){
+
+    }
+    public void trade_sell(){
+
+    }
+
     int counter = 0;
 
     private void transitionScreen() {
@@ -557,9 +595,9 @@ public class UI {
     }
     public void drawDialogueScreen(){
         // WINDOW
-        int x = gp.tileSize * 2;
+        int x = gp.tileSize * 3;
         int y = gp.tileSize/2;
-        int width = gp.screenWidth - (gp.tileSize*4);
+        int width = gp.screenWidth - (gp.tileSize*6);
         int height = gp.tileSize*4;
 
         drawSubWindow(x,y,width,height);
